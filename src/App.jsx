@@ -327,7 +327,7 @@ export default function App() {
         </div>
         
         {/* Desktop Menu */}
-        <nav className="hidden md:flex items-center gap-6" style={{ fontWeight: 500, fontSize: '0.95rem', color: '#1a1a2e' }}>
+        <nav className="desktop-menu" style={{ fontWeight: 500, fontSize: '0.95rem', color: '#1a1a2e' }}>
           <a className="hover-link" onClick={() => { setCurrentView('home'); window.scrollTo(0,0); }} style={{ cursor: 'pointer' }}>Inicio</a>
           <a className="hover-link" onClick={() => { setCurrentView('home'); setTimeout(() => document.getElementById('booking-section')?.scrollIntoView({ behavior: 'smooth' }), 100); }} style={{ cursor: 'pointer' }}>Servicios y Citas</a>
           <a className="hover-link" onClick={() => { setCurrentView('home'); setTimeout(() => document.getElementById('ubicacion')?.scrollIntoView({ behavior: 'smooth' }), 100); }} style={{ cursor: 'pointer' }}>Ubicación</a>
@@ -337,7 +337,7 @@ export default function App() {
         </nav>
 
         {/* Mobile Menu Button */}
-        <button onClick={() => setIsMenuOpen(true)} className="md:hidden icon-animated" style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--primary-pink)' }}>
+        <button onClick={() => setIsMenuOpen(true)} className="mobile-menu-btn icon-animated" style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--primary-pink)' }}>
           <Menu size={32} />
         </button>
       </header>

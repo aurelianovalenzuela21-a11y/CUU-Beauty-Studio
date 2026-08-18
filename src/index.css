@@ -579,3 +579,23 @@ p { margin-bottom: 1rem; color: var(--text-muted); }
   transform: scaleX(1);
   transform-origin: bottom left;
 }
+
+/* Responsive Header */
+.desktop-menu {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.mobile-menu-btn {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .desktop-menu {
+    display: none !important;
+  }
+  .mobile-menu-btn {
+    display: block !important;
+  }
+}
