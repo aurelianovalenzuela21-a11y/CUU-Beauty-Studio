@@ -118,15 +118,12 @@ export default function App() {
       id: 'ailyn',
       name: 'Ailyn',
       role: 'Manicurista',
-      image: '/ailyn.jpg',
+      image: '/profile_ailyn_new.png',
       whatsapp: '5216142864898',
       portfolioImages: [
-        'https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&q=80&w=400',
-        'https://images.unsplash.com/photo-1522337660859-02fbefca4702?auto=format&fit=crop&q=80&w=400',
-        'https://images.unsplash.com/photo-1519014816548-bf5fe059e98b?auto=format&fit=crop&q=80&w=400',
-        'https://images.unsplash.com/photo-1595868846187-c100155b410d?auto=format&fit=crop&q=80&w=400',
-        'https://images.unsplash.com/photo-1599839619722-39751411ea63?auto=format&fit=crop&q=80&w=400',
-        'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&q=80&w=400'
+        '/portfolio_ailyn_1.png',
+        '/portfolio_ailyn_2.png',
+        '/portfolio_ailyn_3.png'
       ],
       services: [
         { id: 's1', name: 'Manicura Clásica', duration: '45 min' },
@@ -138,15 +135,12 @@ export default function App() {
       id: 'jazmine',
       name: 'Jazmine',
       role: 'Manicurista',
-      image: '/jazmine.jpg',
+      image: '/profile_jazmine_new.jpg',
       whatsapp: '5216567545111',
       portfolioImages: [
-        'https://images.unsplash.com/photo-1595868846187-c100155b410d?auto=format&fit=crop&q=80&w=400',
-        'https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&q=80&w=400',
-        'https://images.unsplash.com/photo-1519014816548-bf5fe059e98b?auto=format&fit=crop&q=80&w=400',
-        'https://images.unsplash.com/photo-1522337660859-02fbefca4702?auto=format&fit=crop&q=80&w=400',
-        'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&q=80&w=400',
-        'https://images.unsplash.com/photo-1599839619722-39751411ea63?auto=format&fit=crop&q=80&w=400'
+        '/portfolio_jazmine_1.jpg',
+        '/portfolio_jazmine_2.jpg',
+        '/portfolio_jazmine_3.jpg'
       ],
       services: [
         { id: 's4', name: 'Manicura Rusa', duration: '60 min' },
@@ -158,15 +152,12 @@ export default function App() {
       id: 'bere',
       name: 'Bere',
       role: 'Pedicurista',
-      image: '/bere.jpg',
+      image: '/profile_bere_new.jpg',
       whatsapp: '5216145768073',
       portfolioImages: [
-        'https://images.unsplash.com/photo-1516975080661-46bfa335e2eb?auto=format&fit=crop&q=80&w=400',
-        'https://images.unsplash.com/photo-1519014816548-bf5fe059e98b?auto=format&fit=crop&q=80&w=400',
-        'https://images.unsplash.com/photo-1522337660859-02fbefca4702?auto=format&fit=crop&q=80&w=400',
-        'https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&q=80&w=400',
-        'https://images.unsplash.com/photo-1595868846187-c100155b410d?auto=format&fit=crop&q=80&w=400',
-        'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&q=80&w=400'
+        '/portfolio_bere_1.jpg',
+        '/portfolio_bere_2.jpg',
+        '/portfolio_bere_3.jpg'
       ],
       services: [
         { id: 's7', name: 'Pedicura Spa', duration: '60 min' },
@@ -432,51 +423,41 @@ export default function App() {
                 <h3 className="text-center mb-6">¿Con quién te gustaría agendar?</h3>
                 <div className="grid grid-cols-2 gap-4">
                   {staffList.map(staff => (
-                    <div key={staff.id} className="card" style={{ padding: '1.5rem', borderColor: selectedStaff === staff.id ? 'var(--primary-pink)' : 'var(--border-color)', borderWidth: selectedStaff === staff.id ? '2px' : '1px' }}>
+                    <div 
+                      key={staff.id} 
+                      className="card" 
+                      style={{ padding: '1.5rem', borderColor: selectedStaff === staff.id ? 'var(--primary-pink)' : 'var(--border-color)', borderWidth: selectedStaff === staff.id ? '2px' : '1px', cursor: 'pointer' }}
+                      onClick={() => { setSelectedStaff(staff.id); setBookingStep(2); }}
+                    >
                       <div className="flex flex-col items-center text-center h-full">
-                        <div 
-                          className="staff-image-clickable"
-                          onClick={() => {
-                            setSelectedPortfolioStaff(staff.id);
-                            setCurrentView('portfolio');
-                            window.scrollTo(0, 0);
-                          }}
-                          style={{cursor: 'pointer'}}
-                        >
-                          <img src={staff.image} alt={staff.name} style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover', marginBottom: '1rem', border: '3px solid var(--primary-pink-light)' }} />
+                        <div className="rotating-light-wrapper">
+                          <img 
+                            src={staff.image} 
+                            alt={staff.name} 
+                            style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover', marginBottom: '1rem', border: '3px solid var(--primary-pink-light)' }} 
+                          />
                         </div>
                         <h4 style={{ margin: 0 }}>{staff.name}</h4>
-                        <span className="text-muted" style={{ fontSize: '0.875rem' }}>{staff.role}</span>
-                        
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', width: '100%', marginTop: '1.5rem' }}>
-                          <button 
-                            className="btn animated-gradient-btn" 
-                            style={{ fontSize: '0.85rem', padding: '0.6rem 1rem', width: '100%' }} 
-                            onClick={(e) => { e.stopPropagation(); setSelectedStaff(staff.id); setBookingStep(2); }}
+                        <span className="text-muted" style={{ fontSize: '0.875rem', marginBottom: '1rem' }}>{staff.role}</span>
+                        <div style={{ display: 'flex', gap: '8px', width: '100%', marginTop: 'auto' }}>
+                          <a 
+                            href={`https://wa.me/${staff.whatsapp}?text=Hola%20${staff.name},%20me%20gustar%C3%ADa%20agendar%20una%20cita.`} 
+                            target="_blank" 
+                            rel="noreferrer" 
+                            className="btn" 
+                            style={{ flex: 1, backgroundColor: '#ffffff', color: 'rgba(37, 211, 102, 0.8)', border: '1px solid rgba(37, 211, 102, 0.25)', fontSize: '0.8rem', padding: '0.6rem 0.5rem', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '4px', boxShadow: '0 2px 5px rgba(0,0,0,0.02)' }} 
+                            onClick={(e) => e.stopPropagation()}
                           >
-                            Agendar aquí
-                          </button>
-                          
-                          <div style={{ display: 'flex', gap: '8px', width: '100%' }}>
-                            <a 
-                              href={`https://wa.me/${staff.whatsapp}?text=Hola%20${staff.name},%20me%20gustar%C3%ADa%20agendar%20una%20cita.`} 
-                              target="_blank" 
-                              rel="noreferrer" 
-                              className="btn" 
-                              style={{ flex: 1, backgroundColor: '#ffffff', color: 'rgba(37, 211, 102, 0.8)', border: '1px solid rgba(37, 211, 102, 0.25)', fontSize: '0.8rem', padding: '0.6rem 0.5rem', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '4px', boxShadow: '0 2px 5px rgba(0,0,0,0.02)' }} 
-                              onClick={(e) => e.stopPropagation()}
-                            >
-                              <MessageCircle size={14} /> WhatsApp
-                            </a>
-                            <a 
-                              href={`tel:+${staff.whatsapp}`} 
-                              className="btn" 
-                              style={{ flex: 1, backgroundColor: '#ffffff', color: 'rgba(168, 85, 247, 0.8)', border: '1px solid rgba(168, 85, 247, 0.25)', fontSize: '0.8rem', padding: '0.6rem 0.5rem', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '4px', boxShadow: '0 2px 5px rgba(0,0,0,0.02)' }} 
-                              onClick={(e) => e.stopPropagation()}
-                            >
-                              <Phone size={14} /> Llamar
-                            </a>
-                          </div>
+                            <MessageCircle size={14} /> WhatsApp
+                          </a>
+                          <a 
+                            href={`tel:+${staff.whatsapp}`} 
+                            className="btn" 
+                            style={{ flex: 1, backgroundColor: '#ffffff', color: 'rgba(168, 85, 247, 0.8)', border: '1px solid rgba(168, 85, 247, 0.25)', fontSize: '0.8rem', padding: '0.6rem 0.5rem', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '4px', boxShadow: '0 2px 5px rgba(0,0,0,0.02)' }} 
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <Phone size={14} /> Llamar
+                          </a>
                         </div>
                       </div>
                     </div>
