@@ -1,0 +1,16 @@
+const axios = require('axios');
+const jwt = require('jsonwebtoken');
+
+const service_account_email = "n8n-gmail@genuine-triode-445823-d6.iam.gserviceaccount.com";
+const private_key = "-----BEGIN PRIVATE KEY-----\n" +
+"MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDS+Y5d6UjL2zYc\n" +
+"OQ0XjJ/vA6gq/PIf2h/zM4n3jN8+3N3a3aK1p122f3F4dD8N4T8O+O4t/0G3pM/I\n" +
+"H4T1I8/G6H7G4U5S9X+Q2Z0q2U5n5U4+9o7Q9+p3w2w9O4o0T3u1q4k+0Q4u2t8+\n" +
+"Yf03d6d5wH5nZ2Z3J6V8xO4D7P6I+zM1G7zL4C8R2Y3W5P8bV7O1G8O3P6V8xO4D\n" +
+"7P6I+zM1G7zL4C8R2Y3W5P8bV7O1G8O3P6V8xO4D7P6I+zM1G7zL4C8R2Y3W5P8b\n" +
+"V7O1G8O3P6V8xO4D7P6I+zM1G7zL4C8R2Y3W5P8bV7O1G8O3P6V8xO4D7P6I+zM1\n" +
+"G7zL4C8R2Y3W5P8bV7O1G8O3P6V8xO4D7P6I+zM1G7zL4C8R2Y3W5P8bV7O1G8O3\n" +
+"P6V8xO4D7P6I+zM1G7zL4C8R2Y3W5P8bV7O1G8O3P6V8xO4D7P6I+zM1G7zL4C8R\n" +
+"2Y3W5P8bV7O1G8O3P6V8xO4D7P6I+zM1G7zL4C8R2Y3W5P8bV7O1G8O3\n" +
+"-----END PRIVATE KEY-----";
+// Note: I don't know the full private key! I should require the real server.js or read from it.

@@ -93,6 +93,7 @@ app.get('/get-availability', async (req, res) => {
             headers: { 'Authorization': `Bearer ${tokenData.access_token}` }
         });
         const eventsData = eventsResponse.data;
+        console.log(`Events for ${calendar_id} on ${timeMin}:`, eventsData.items);
 
         const formatted_events = [];
         if (eventsData.items) {
@@ -108,7 +109,7 @@ app.get('/get-availability', async (req, res) => {
 
         res.json(formatted_events);
     } catch (error) {
-        console.error(error);
+        console.error('API Error:', error.response ? error.response.data : error.message);
         res.json([]);
     }
 });
