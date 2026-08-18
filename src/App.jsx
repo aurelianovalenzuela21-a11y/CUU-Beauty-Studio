@@ -221,8 +221,8 @@ export default function App() {
           const staffName = staffList.find(s => s.id === selectedStaff)?.name;
           // Use the local PHP backend for development/production
           // For local testing without building, you can start a php server in public folder: php -S localhost:8000 -t public
-          // and change this URL to http://localhost:8000/get-availability.php
-          const url = `/get-availability.php?date=${dateStr}&staffName=${staffName}`;
+          // and change this URL to http://localhost:3000/get-availability
+          const url = `/get-availability?date=${dateStr}&staffName=${staffName}`;
           const response = await fetch(url);
           const data = await response.json();
           // data should be an array of events from Google Calendar
