@@ -507,3 +507,75 @@ p { margin-bottom: 1rem; color: var(--text-muted); }
   transform: scale(1.05);
   box-shadow: 0 10px 20px rgba(0,0,0,0.1);
 }
+
+/* Nuevos estilos esteticos */
+.service-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.5rem;
+  border-radius: 1rem;
+  background: white;
+  border: 1px solid var(--border-color);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.service-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.06);
+  border-color: rgba(168, 85, 247, 0.3);
+}
+
+.service-card.selected {
+  /* Pastel blue to pink top-to-bottom */
+  background: linear-gradient(180deg, #dbeafe 0%, #fbcfe8 100%);
+  border: none;
+  box-shadow: 0 10px 25px rgba(244, 114, 182, 0.25);
+  transform: translateY(-2px);
+}
+
+.service-card-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease;
+}
+
+.service-card:hover .service-card-action {
+  transform: translateX(4px);
+}
+
+.service-card.selected:hover .service-card-action {
+  transform: scale(1.1);
+}
+
+.hover-link {
+  position: relative;
+  text-decoration: none;
+  padding-bottom: 2px;
+  transition: color 0.2s ease;
+}
+
+.hover-link:hover {
+  color: var(--primary-pink) !important;
+}
+
+.hover-link::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: var(--primary-pink);
+  transform-origin: bottom right;
+  transition: transform 0.25s ease-out;
+}
+
+.hover-link:hover::after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}

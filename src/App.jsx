@@ -321,10 +321,23 @@ export default function App() {
       {currentView === 'portfolio' ? <PortfolioView /> : (
         <>
       {/* Header */}
-      <header className="container py-8 flex justify-between items-center relative z-50">
-        <div style={{ width: '32px' }}></div> {/* Spacer for centering */}
-        <img src="/logo-cuu.png" alt="CUU Beauty Studio" style={{ height: '90px', objectFit: 'contain', cursor: 'pointer' }} onClick={() => { setCurrentView('home'); window.scrollTo(0,0); }} />
-        <button onClick={() => setIsMenuOpen(true)} className="icon-animated" style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--primary-pink)' }}>
+      <header className="container py-6 flex justify-between items-center relative z-50">
+        <div className="flex items-center">
+          <img src="/logo-cuu.png" alt="CUU Beauty Studio" style={{ height: '70px', objectFit: 'contain', cursor: 'pointer' }} onClick={() => { setCurrentView('home'); window.scrollTo(0,0); }} />
+        </div>
+        
+        {/* Desktop Menu */}
+        <nav className="hidden md:flex items-center gap-6" style={{ fontWeight: 500, fontSize: '0.95rem', color: '#1a1a2e' }}>
+          <a className="hover-link" onClick={() => { setCurrentView('home'); window.scrollTo(0,0); }} style={{ cursor: 'pointer' }}>Inicio</a>
+          <a className="hover-link" onClick={() => { setCurrentView('home'); setTimeout(() => document.getElementById('booking-section')?.scrollIntoView({ behavior: 'smooth' }), 100); }} style={{ cursor: 'pointer' }}>Servicios y Citas</a>
+          <a className="hover-link" onClick={() => { setCurrentView('home'); setTimeout(() => document.getElementById('ubicacion')?.scrollIntoView({ behavior: 'smooth' }), 100); }} style={{ cursor: 'pointer' }}>Ubicación</a>
+          <a className="hover-link" onClick={() => { setCurrentView('courses'); window.scrollTo(0,0); }} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}>
+            Cursos de Manicura <span className="badge-nuevo" style={{ fontSize: '0.65rem', padding: '2px 6px' }}>NUEVO</span>
+          </a>
+        </nav>
+
+        {/* Mobile Menu Button */}
+        <button onClick={() => setIsMenuOpen(true)} className="md:hidden icon-animated" style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--primary-pink)' }}>
           <Menu size={32} />
         </button>
       </header>
@@ -483,15 +496,25 @@ export default function App() {
                   </div>
                 </div>
 
-                <div className="flex flex-col gap-3">
-                  {getStaffServices().map(service => (
-                    <div key={service.id} className="flex justify-between items-center p-4" style={{ borderRadius: '0.75rem', border: '1px solid', borderColor: selectedService === service.id ? 'var(--primary-pink)' : 'var(--border-color)', background: selectedService === service.id ? 'var(--primary-pink-light)' : 'white', cursor: 'pointer' }} onClick={() => { setSelectedService(service.id); setBookingStep(3); }}>
-                      <div>
-                        <h4 style={{margin: 0}}>{service.name}</h4>
-                        <span className="text-muted" style={{fontSize: '0.875rem'}}>{service.duration}</span>
+                <div className="flex flex-col gap-4">
+                  {getStaffServices().map(service => {
+                    const isSelected = selectedService === service.id;
+                    return (
+                      <div 
+                        key={service.id} 
+                        className={`service-card ${isSelected ? 'selected' : ''}`}
+                        onClick={() => { setSelectedService(service.id); setBookingStep(3); }}
+                      >
+                        <div>
+                          <h4 style={{margin: 0, color: isSelected ? '#1e3a8a' : '#1a1a2e'}}>{service.name}</h4>
+                          <span style={{fontSize: '0.875rem', color: isSelected ? 'rgba(30, 58, 138, 0.7)' : 'var(--text-muted)'}}>{service.duration}</span>
+                        </div>
+                        <div className="service-card-action">
+                          {isSelected ? <CheckCircle size={22} color="#1e3a8a" /> : <ChevronRight size={22} color="var(--primary-pink)" />}
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
 
                 <div className="flex justify-start mt-8">

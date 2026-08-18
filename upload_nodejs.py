@@ -1,8 +1,9 @@
 import ftplib
 import os
+import sys
 
 FTP_HOST = "195.35.38.244"
-FTP_USER = "u272603187.cuubeauty.com"
+FTP_USER = "u272603187"
 FTP_PASS = "Provicional21?"
 
 def upload_file(ftp, file_path, target_path):
@@ -29,21 +30,26 @@ def main():
     ftp = ftplib.FTP(FTP_HOST)
     ftp.login(FTP_USER, FTP_PASS)
     
-    # Optional: Delete old index.html and .php to avoid confusion
-    try: ftp.delete('index.html')
-    except: pass
-    try: ftp.delete('get-availability.php')
-    except: pass
-
     # Upload Node server files
     upload_file(ftp, 'server.js', 'server.js')
-    upload_file(ftp, 'package.json', 'package.json')
-    upload_file(ftp, 'package-lock.json', 'package-lock.json')
-
-    # Upload dist folder
-    upload_dir(ftp, 'dist', 'dist')
     
     print("All files uploaded successfully!")
+    
+    # Try touching tmp/restart.txt to reload Passenger Node.js app
+    try:
+        ftp.mkd('tmp')
+    except:
+        pass
+    try:
+        with open('restart.txt', 'w') as f:
+            f.write('restart')
+        with open('restart.txt', 'rb') as f:
+            ftp.storbinary('STOR tmp/restart.txt', f)
+        os.remove('restart.txt')
+        print("Triggered Passenger restart")
+    except Exception as e:
+        print("Could not trigger restart:", e)
+
     ftp.quit()
 
 if __name__ == "__main__":
