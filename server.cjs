@@ -1,10 +1,7 @@
-import express from 'express';
-import path from 'path';
-import jwt from 'jsonwebtoken';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const express = require('express');
+const path = require('path');
+const jwt = require('jsonwebtoken');
+const axios = require('axios');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -73,16 +70,14 @@ app.get('/get-availability', async (req, res) => {
 
         const token = jwt.sign(payload, private_key, { algorithm: 'RS256' });
 
-        const tokenResponse = await fetch('https://oauth2.googleapis.com/token', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: new URLSearchParams({
-                grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
-                assertion: token
-            })
+        const tokenResponse = await axios.post('https://oauth2.googleapis.com/token', new URLSearchParams({
+            grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+            assertion: token
+        }).toString(), {
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
         });
         
-        const tokenData = await tokenResponse.json();
+        const tokenData = tokenResponse.data;
         if (!tokenData.access_token) {
             return res.json([]);
         }
@@ -94,10 +89,10 @@ app.get('/get-availability', async (req, res) => {
 
         const url = `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(calendar_id)}/events?timeMin=${encodeURIComponent(timeMin.toISOString())}&timeMax=${encodeURIComponent(timeMax.toISOString())}&singleEvents=true`;
 
-        const eventsResponse = await fetch(url, {
+        const eventsResponse = await axios.get(url, {
             headers: { 'Authorization': `Bearer ${tokenData.access_token}` }
         });
-        const eventsData = await eventsResponse.json();
+        const eventsData = eventsResponse.data;
 
         const formatted_events = [];
         if (eventsData.items) {
