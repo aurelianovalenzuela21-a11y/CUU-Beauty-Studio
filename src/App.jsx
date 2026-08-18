@@ -20,7 +20,18 @@ export default function App() {
 
   const [formData, setFormData] = useState({ name: '', phone: '', email: '' });
   
-  const backgrounds = ['/slide1.jpg', '/slide2.jpg', '/slide3.jpg'];
+  const backgrounds = [
+    '/portfolio_ailyn_1.png',
+    '/portfolio_bere_1.jpg',
+    '/portfolio_arely_2.jpg',
+    '/portfolio_ailyn_2.png',
+    '/portfolio_arely_3.jpg',
+    '/portfolio_bere_2.jpg',
+    '/portfolio_arely_4.jpg',
+    '/portfolio_ailyn_3.png',
+    '/portfolio_arely_1.jpg',
+    '/portfolio_bere_3.jpg'
+  ];
   const [currentBg, setCurrentBg] = useState(0);
 
   useEffect(() => {
@@ -168,21 +179,20 @@ export default function App() {
     {
       id: 'arely',
       name: 'Arely',
-      role: 'Cejas y Faciales',
-      image: '/arely.jpg',
-      whatsapp: '5216145768073',
+      role: 'Cuidado Facial, Cejas y Maquillaje',
+      image: '/profile_arely_new.jpg',
+      whatsapp: '5216142751792',
       portfolioImages: [
-        'https://images.unsplash.com/photo-1512496015851-a1fbcf69f561?auto=format&fit=crop&q=80&w=400',
-        'https://images.unsplash.com/photo-1522337660859-02fbefca4702?auto=format&fit=crop&q=80&w=400',
-        'https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&q=80&w=400',
-        'https://images.unsplash.com/photo-1595868846187-c100155b410d?auto=format&fit=crop&q=80&w=400',
-        'https://images.unsplash.com/photo-1519014816548-bf5fe059e98b?auto=format&fit=crop&q=80&w=400',
-        'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&q=80&w=400'
+        '/portfolio_arely_1.jpg',
+        '/portfolio_arely_2.jpg',
+        '/portfolio_arely_3.jpg',
+        '/portfolio_arely_4.jpg'
       ],
       services: [
-        { id: 's10', name: 'Lifting de Pestañas', duration: '60 min' },
-        { id: 's11', name: 'Laminado de Cejas', duration: '45 min' },
-        { id: 's12', name: 'Microblading', duration: '120 min' },
+        { id: 's10', name: 'Limpieza y Cuidado Facial', duration: '60 min' },
+        { id: 's11', name: 'Laminado y Planchado de Cejas', duration: '45 min' },
+        { id: 's12', name: 'Maquillaje Profesional', duration: '90 min' },
+        { id: 's13', name: 'Lifting y Extensión de Pestañas', duration: '75 min' },
       ]
     }
   ];
