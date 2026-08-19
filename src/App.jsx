@@ -21,16 +21,18 @@ export default function App() {
   const [formData, setFormData] = useState({ name: '', phone: '', email: '' });
   
   const backgrounds = [
-    '/portfolio_ailyn_1.png',
+    '/portfolio_ailyn_1.jpg',
     '/portfolio_bere_1.jpg',
     '/portfolio_arely_2.jpg',
-    '/portfolio_ailyn_2.png',
+    '/portfolio_ailyn_2.jpg',
     '/portfolio_arely_3.jpg',
     '/portfolio_bere_2.jpg',
+    '/portfolio_ailyn_3.jpg',
     '/portfolio_arely_4.jpg',
-    '/portfolio_ailyn_3.png',
+    '/portfolio_ailyn_4.jpg',
+    '/portfolio_bere_3.jpg',
     '/portfolio_arely_1.jpg',
-    '/portfolio_bere_3.jpg'
+    '/portfolio_ailyn_5.jpg'
   ];
   const [currentBg, setCurrentBg] = useState(0);
 
@@ -132,9 +134,11 @@ export default function App() {
       image: '/profile_ailyn_new.png',
       whatsapp: '5216142864898',
       portfolioImages: [
-        '/portfolio_ailyn_1.png',
-        '/portfolio_ailyn_2.png',
-        '/portfolio_ailyn_3.png'
+        '/portfolio_ailyn_1.jpg',
+        '/portfolio_ailyn_2.jpg',
+        '/portfolio_ailyn_3.jpg',
+        '/portfolio_ailyn_4.jpg',
+        '/portfolio_ailyn_5.jpg'
       ],
       services: [
         { id: 's1', name: 'Manicura Clásica', duration: '45 min' },
