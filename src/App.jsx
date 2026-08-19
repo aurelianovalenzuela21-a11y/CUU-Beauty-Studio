@@ -563,6 +563,12 @@ export default function App() {
                         >
                           <Sparkles size={14} /> Agendar Cita
                         </button>
+                        <button
+                          onClick={(e) => { e.stopPropagation(); setSelectedPortfolioStaff(staff.id); setCurrentView('portfolio'); window.scrollTo(0,0); }}
+                          style={{ width: '100%', marginTop: '6px', padding: '0.55rem', borderRadius: '20px', border: '1px solid rgba(168,85,247,0.3)', background: 'transparent', cursor: 'pointer', color: 'var(--primary-pink)', fontWeight: 600, fontSize: '0.8rem', fontFamily: "'Outfit', sans-serif", display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '5px', transition: 'all 0.2s' }}
+                        >
+                          <Star size={13} /> Ver Portafolio
+                        </button>
                       </div>
                     </div>
                   ))}

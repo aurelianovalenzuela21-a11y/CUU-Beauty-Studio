@@ -110,7 +110,7 @@ p { margin-bottom: 1rem; color: var(--text-muted); }
   display: flex;
   width: max-content;
   height: 100%;
-  animation: scrollMarquee 20s linear infinite;
+  animation: scrollMarquee 35s linear infinite;
 }
 
 @keyframes scrollMarquee {
@@ -515,11 +515,11 @@ p { margin-bottom: 1rem; color: var(--text-muted); }
   align-items: center;
   padding: 1.25rem 1.5rem;
   border-radius: 1rem;
-  background: white;
-  border: 1px solid var(--border-color);
+  background: linear-gradient(135deg, rgba(250, 245, 255, 0.9) 0%, rgba(239, 246, 255, 0.9) 100%);
+  border: 1px solid rgba(168, 85, 247, 0.15);
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+  box-shadow: 0 2px 8px rgba(168, 85, 247, 0.06);
 }
 
 .service-card:hover {
