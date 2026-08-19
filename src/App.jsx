@@ -203,7 +203,63 @@ export default function App() {
   const daysInMonth = eachDayOfInterval({ start: weekStart, end: weekEnd });
   const blankDays = [];
 
-  const availableTimes = ['10:00 AM', '12:00 PM', '02:00 PM', '05:00 PM', '07:00 PM'];
+  // Horarios por especialista (clave: día de semana 0=Domingo, 1=Lun, ..., 6=Sab)
+  const staffSchedules = {
+    ailyn: {
+      // Lunes-Viernes: todos los slots que tenía antes excepto 7pm
+      1: ['10:00 AM', '12:00 PM', '02:00 PM', '05:00 PM'],
+      2: ['10:00 AM', '12:00 PM', '02:00 PM', '05:00 PM'],
+      3: ['10:00 AM', '12:00 PM', '02:00 PM', '05:00 PM'],
+      4: ['10:00 AM', '12:00 PM', '02:00 PM', '05:00 PM'],
+      5: ['10:00 AM', '12:00 PM', '02:00 PM', '05:00 PM'],
+      // Sábado: sin 11am ni 1pm
+      6: ['10:00 AM', '02:00 PM', '05:00 PM'],
+      // Domingo: sin citas
+      0: []
+    },
+    jazmine: {
+      // Lunes-Viernes: 2pm, 4pm, 6pm
+      1: ['02:00 PM', '04:00 PM', '06:00 PM'],
+      2: ['02:00 PM', '04:00 PM', '06:00 PM'],
+      3: ['02:00 PM', '04:00 PM', '06:00 PM'],
+      4: ['02:00 PM', '04:00 PM', '06:00 PM'],
+      5: ['02:00 PM', '04:00 PM', '06:00 PM'],
+      // Sábado: 10am, 12pm, 2pm, 4pm, 6pm
+      6: ['10:00 AM', '12:00 PM', '02:00 PM', '04:00 PM', '06:00 PM'],
+      // Domingo: sin citas
+      0: []
+    },
+    bere: {
+      // Lunes-Viernes: 3pm, 5pm, 7pm
+      1: ['03:00 PM', '05:00 PM', '07:00 PM'],
+      2: ['03:00 PM', '05:00 PM', '07:00 PM'],
+      3: ['03:00 PM', '05:00 PM', '07:00 PM'],
+      4: ['03:00 PM', '05:00 PM', '07:00 PM'],
+      5: ['03:00 PM', '05:00 PM', '07:00 PM'],
+      // Sábado: 3pm, 5pm
+      6: ['03:00 PM', '05:00 PM'],
+      // Domingo: sin citas
+      0: []
+    },
+    arely: {
+      // Lunes-Viernes: horario original conservado
+      1: ['10:00 AM', '12:00 PM', '02:00 PM', '04:00 PM', '06:00 PM', '07:00 PM'],
+      2: ['10:00 AM', '12:00 PM', '02:00 PM', '04:00 PM', '06:00 PM', '07:00 PM'],
+      3: ['10:00 AM', '12:00 PM', '02:00 PM', '04:00 PM', '06:00 PM', '07:00 PM'],
+      4: ['10:00 AM', '12:00 PM', '02:00 PM', '04:00 PM', '06:00 PM', '07:00 PM'],
+      5: ['10:00 AM', '12:00 PM', '02:00 PM', '04:00 PM', '06:00 PM', '07:00 PM'],
+      6: ['10:00 AM', '12:00 PM', '02:00 PM', '04:00 PM', '06:00 PM', '07:00 PM'],
+      0: ['10:00 AM', '12:00 PM', '02:00 PM', '04:00 PM', '06:00 PM', '07:00 PM']
+    }
+  };
+
+  const getAvailableTimes = () => {
+    if (!selectedStaff || !selectedDate) return [];
+    const dayOfWeek = getDay(selectedDate); // 0=Dom, 1=Lun, ..., 6=Sab
+    const schedule = staffSchedules[selectedStaff];
+    if (!schedule) return [];
+    return schedule[dayOfWeek] || [];
+  };
 
   const to24Hour = (timeStr) => {
     const [time, modifier] = timeStr.split(' ');
@@ -267,13 +323,16 @@ export default function App() {
     const endM = totalMins % 60;
     const end24 = `${endH.toString().padStart(2, '0')}:${endM.toString().padStart(2, '0')}`;
 
+    const staffName = staffList.find(s => s.id === selectedStaff)?.name;
+    const dateStr = selectedDate ? format(selectedDate, 'yyyy-MM-dd') : null;
+
     // Preparar el paquete de datos para n8n
     const bookingData = {
       staffId: selectedStaff,
-      staffName: staffList.find(s => s.id === selectedStaff)?.name,
+      staffName,
       serviceId: selectedService,
       serviceName: getSelectedServiceDetails()?.name,
-      date: selectedDate ? format(selectedDate, 'yyyy-MM-dd') : null,
+      date: dateStr,
       time: selectedTime,
       time24Start: start24,
       time24End: end24,
@@ -284,14 +343,26 @@ export default function App() {
     };
 
     try {
-      // Usando el Webhook en producción configurado en n8n
-      const WEBHOOK_URL = 'https://n8n.cuustudio.com/webhook/book-appointment';
+      // 1. Crear el evento en Google Calendar (para que quede bloqueado y no se pueda volver a reservar)
+      await fetch('/create-event', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          date: dateStr,
+          time: start24,
+          staffName,
+          customerName: formData.name,
+          customerPhone: cleanPhone,
+          customerEmail: formData.email,
+          serviceName: getSelectedServiceDetails()?.name
+        })
+      });
 
+      // 2. Enviar al Webhook de n8n para notificaciones (correo y WhatsApp)
+      const WEBHOOK_URL = 'https://n8n.cuustudio.com/webhook/book-appointment';
       await fetch(WEBHOOK_URL, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(bookingData)
       });
       
@@ -299,9 +370,8 @@ export default function App() {
       await new Promise(resolve => setTimeout(resolve, 800));
 
     } catch (error) {
-      console.error('Error enviando datos al webhook de n8n:', error);
-      // En producción, aquí podrías mostrar una alerta, 
-      // por ahora, permitimos que avance el flujo para no bloquear la experiencia en caso de fallo de red.
+      console.error('Error al confirmar la cita:', error);
+      // Permitimos que avance el flujo para no bloquear la experiencia en caso de fallo de red.
     } finally {
       setLoading(false);
       setBookingStep(5); // Mostrar pantalla de éxito
@@ -574,7 +644,9 @@ export default function App() {
                       </p>
                     ) : (
                       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem' }}>
-                        {availableTimes.map(time => {
+                        {getAvailableTimes().length === 0 ? (
+                          <p className="text-muted text-sm">No hay citas disponibles para este día.</p>
+                        ) : getAvailableTimes().map(time => {
                           const time24 = to24Hour(time);
                           const [h, m] = time24.split(':').map(Number);
                           const slotDate = new Date(selectedDate);
