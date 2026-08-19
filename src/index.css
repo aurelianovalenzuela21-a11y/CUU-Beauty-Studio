@@ -635,3 +635,44 @@ p { margin-bottom: 1rem; color: var(--text-muted); }
     transform: rotate(360deg);
   }
 }
+
+/* ── Botón Agendar Cita con gradiente animado ── */
+@keyframes gradientFlow {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.btn-agendar {
+  width: 100%;
+  margin-top: 10px;
+  padding: 0.7rem 1rem;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+  color: white;
+  font-weight: 700;
+  font-size: 0.85rem;
+  font-family: 'Outfit', sans-serif;
+  letter-spacing: 0.3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: linear-gradient(135deg, #f472b6, #a855f7, #3b82f6, #06b6d4, #f472b6);
+  background-size: 300% 300%;
+  animation: gradientFlow 4s ease infinite;
+  box-shadow: 0 4px 15px rgba(168, 85, 247, 0.35);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.btn-agendar:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(168, 85, 247, 0.5);
+}
+
+.btn-agendar:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(168, 85, 247, 0.3);
+}
+

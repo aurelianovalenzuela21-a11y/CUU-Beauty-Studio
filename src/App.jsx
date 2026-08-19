@@ -133,6 +133,7 @@ export default function App() {
       role: 'Manicurista',
       image: '/profile_ailyn_new.png',
       whatsapp: '5216142864898',
+      email: 'ailyn332112@gmail.com',
       portfolioImages: [
         '/portfolio_ailyn_1.jpg',
         '/portfolio_ailyn_2.jpg',
@@ -152,6 +153,7 @@ export default function App() {
       role: 'Manicurista',
       image: '/profile_jazmine_new.jpg',
       whatsapp: '5216567545111',
+      email: 'Jazminechavez62@gmail.com',
       portfolioImages: [
         '/portfolio_jazmine_1.jpg',
         '/portfolio_jazmine_2.jpg',
@@ -169,6 +171,7 @@ export default function App() {
       role: 'Pedicurista',
       image: '/profile_bere_new.jpg',
       whatsapp: '5216145768073',
+      email: '',
       portfolioImages: [
         '/portfolio_bere_1.jpg',
         '/portfolio_bere_2.jpg',
@@ -186,6 +189,7 @@ export default function App() {
       role: 'Cuidado Facial, Cejas y Maquillaje',
       image: '/profile_arely_new.jpg',
       whatsapp: '5216142751792',
+      email: 'diana30d@gmail.com',
       portfolioImages: [
         '/portfolio_arely_1.jpg',
         '/portfolio_arely_2.jpg',
@@ -193,10 +197,13 @@ export default function App() {
         '/portfolio_arely_4.jpg'
       ],
       services: [
-        { id: 's10', name: 'Limpieza y Cuidado Facial', duration: '60 min' },
-        { id: 's11', name: 'Laminado y Planchado de Cejas', duration: '45 min' },
-        { id: 's12', name: 'Maquillaje Profesional', duration: '90 min' },
-        { id: 's13', name: 'Lifting y Extensión de Pestañas', duration: '75 min' },
+        { id: 's10', name: 'Cejas HD', duration: '60 min' },
+        { id: 's11', name: 'Lifting de Pestañas', duration: '60 min' },
+        { id: 's12', name: 'Facial de Reparación', duration: '60 min' },
+        { id: 's13', name: 'Facial de Limpieza Profunda', duration: '90 min' },
+        { id: 's14', name: 'Maxi Facial', duration: '120 min' },
+        { id: 's15', name: 'Keratina', duration: '150 min' },
+        { id: 's16', name: 'Solo Depilación', duration: '30 min' },
       ]
     }
   ];
@@ -246,14 +253,16 @@ export default function App() {
       0: []
     },
     arely: {
-      // Lunes-Viernes: horario original conservado
-      1: ['10:00 AM', '12:00 PM', '02:00 PM', '04:00 PM', '06:00 PM', '07:00 PM'],
-      2: ['10:00 AM', '12:00 PM', '02:00 PM', '04:00 PM', '06:00 PM', '07:00 PM'],
-      3: ['10:00 AM', '12:00 PM', '02:00 PM', '04:00 PM', '06:00 PM', '07:00 PM'],
-      4: ['10:00 AM', '12:00 PM', '02:00 PM', '04:00 PM', '06:00 PM', '07:00 PM'],
-      5: ['10:00 AM', '12:00 PM', '02:00 PM', '04:00 PM', '06:00 PM', '07:00 PM'],
-      6: ['10:00 AM', '12:00 PM', '02:00 PM', '04:00 PM', '06:00 PM', '07:00 PM'],
-      0: ['10:00 AM', '12:00 PM', '02:00 PM', '04:00 PM', '06:00 PM', '07:00 PM']
+      // Lunes-Viernes: 10am a 7pm (cada hora)
+      1: ['10:00 AM', '11:00 AM', '12:00 PM', '01:00 PM', '02:00 PM', '03:00 PM', '04:00 PM', '05:00 PM', '06:00 PM', '07:00 PM'],
+      2: ['10:00 AM', '11:00 AM', '12:00 PM', '01:00 PM', '02:00 PM', '03:00 PM', '04:00 PM', '05:00 PM', '06:00 PM', '07:00 PM'],
+      3: ['10:00 AM', '11:00 AM', '12:00 PM', '01:00 PM', '02:00 PM', '03:00 PM', '04:00 PM', '05:00 PM', '06:00 PM', '07:00 PM'],
+      4: ['10:00 AM', '11:00 AM', '12:00 PM', '01:00 PM', '02:00 PM', '03:00 PM', '04:00 PM', '05:00 PM', '06:00 PM', '07:00 PM'],
+      5: ['10:00 AM', '11:00 AM', '12:00 PM', '01:00 PM', '02:00 PM', '03:00 PM', '04:00 PM', '05:00 PM', '06:00 PM', '07:00 PM'],
+      // Sábados: 10am a 5pm
+      6: ['10:00 AM', '11:00 AM', '12:00 PM', '01:00 PM', '02:00 PM', '03:00 PM', '04:00 PM', '05:00 PM'],
+      // Domingo: sin citas
+      0: []
     }
   };
 
@@ -327,13 +336,18 @@ export default function App() {
     const endM = totalMins % 60;
     const end24 = `${endH.toString().padStart(2, '0')}:${endM.toString().padStart(2, '0')}`;
 
-    const staffName = staffList.find(s => s.id === selectedStaff)?.name;
+    const staffMember = staffList.find(s => s.id === selectedStaff);
+    const staffName = staffMember?.name;
+    const staffEmail = staffMember?.email || '';
+    const staffWhatsapp = staffMember?.whatsapp || '';
     const dateStr = selectedDate ? format(selectedDate, 'yyyy-MM-dd') : null;
 
     // Preparar el paquete de datos para n8n
     const bookingData = {
       staffId: selectedStaff,
       staffName,
+      staffEmail,
+      staffWhatsapp,
       serviceId: selectedService,
       serviceName: getSelectedServiceDetails()?.name,
       date: dateStr,
@@ -543,6 +557,12 @@ export default function App() {
                             <Phone size={14} /> Llamar
                           </a>
                         </div>
+                        <button
+                          className="btn-agendar"
+                          onClick={(e) => { e.stopPropagation(); setSelectedStaff(staff.id); setBookingStep(2); document.getElementById('booking-section')?.scrollIntoView({ behavior: 'smooth' }); }}
+                        >
+                          <Sparkles size={14} /> Agendar Cita
+                        </button>
                       </div>
                     </div>
                   ))}
