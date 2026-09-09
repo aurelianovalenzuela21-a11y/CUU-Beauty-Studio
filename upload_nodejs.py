@@ -2,9 +2,9 @@ import ftplib
 import os
 import sys
 
-FTP_HOST = "195.35.38.244"
-FTP_USER = "u272603187"
-FTP_PASS = "Provicional21?"
+FTP_HOST = os.environ.get("CUU_FTP_HOST", "195.35.38.244")
+FTP_USER = os.environ["CUU_FTP_USER"]
+FTP_PASS = os.environ["CUU_FTP_PASS"]
 
 def upload_file(ftp, file_path, target_path):
     print(f"Uploading {file_path} to {target_path}...")

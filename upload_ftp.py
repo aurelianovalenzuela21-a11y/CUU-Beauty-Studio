@@ -2,13 +2,11 @@ import os
 import ftplib
 import sys
 
-FTP_HOST = "195.35.38.244"
-FTP_USER = "u272603187.cuubeauty.com"
-# Often hostinger usernames are just the u-number, but we'll try the full string or split if needed
-# Let's try the full string first, if it fails we try "u272603187"
-FTP_PASS = "Provicional21?"
+FTP_HOST = os.environ.get("CUU_FTP_HOST", "195.35.38.244")
+FTP_USER = os.environ["CUU_FTP_USER"]
+FTP_PASS = os.environ["CUU_FTP_PASS"]
 
-LOCAL_DIR = "/Users/aureliano/Documents/Whatsapp workflow/cuubeauty-frontend/dist"
+LOCAL_DIR = os.environ.get("CUU_LOCAL_DIR", os.path.join(os.path.dirname(__file__), "dist"))
 REMOTE_DIR = "public_html" # typically it's /public_html or public_html
 
 def upload_dir(ftp, local_dir, remote_dir):
