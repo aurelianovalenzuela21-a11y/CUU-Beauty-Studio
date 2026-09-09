@@ -812,7 +812,7 @@ export default function App() {
       <footer className="site-footer">
         <div className="container site-footer-inner">
           <div className="site-footer-brand">
-            <BrandLogo light />
+            <BrandLogo />
             <p style={{ marginTop: '1rem' }}>Manicure, pedicure spa y tratamientos faciales con especialistas certificadas en Chihuahua.</p>
           </div>
           <div className="site-footer-col">
@@ -847,7 +847,7 @@ export default function App() {
 }
 
 // Brand wordmark: "CUU Beauty" set in the site's own typefaces (no image to crop/maintain)
-function BrandLogo({ onClick, light = false }) {
+function BrandLogo({ onClick }) {
   return (
     <span
       onClick={onClick}
@@ -864,18 +864,21 @@ function BrandLogo({ onClick, light = false }) {
         fontWeight: 800,
         fontSize: '1.6rem',
         letterSpacing: '-0.5px',
-        color: light ? '#ffffff' : '#1a1a2e',
+        background: 'linear-gradient(135deg, #f472b6, #a855f7)',
+        WebkitBackgroundClip: 'text',
+        WebkitTextFillColor: 'transparent',
+        backgroundClip: 'text',
+        color: 'transparent',
       }}>
         CUU
       </span>
       <span
-        className={light ? '' : 'animated-gradient-text'}
+        className="animated-gradient-text"
         style={{
           fontFamily: '"Playfair Display", serif',
           fontStyle: 'italic',
           fontWeight: 500,
           fontSize: '1.7rem',
-          color: light ? '#f472b6' : undefined,
         }}
       >
         Beauty
