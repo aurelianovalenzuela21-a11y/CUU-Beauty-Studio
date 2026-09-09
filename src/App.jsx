@@ -4,7 +4,7 @@ import { format, addDays, startOfToday, startOfMonth, endOfMonth, eachDayOfInter
 import { es } from 'date-fns/locale';
 
 export default function App() {
-  const [currentView, setCurrentView] = useState('home'); // 'home' | 'courses' | 'portfolio'
+  const [currentView, setCurrentView] = useState('home'); // 'home' | 'courses' | 'portfolio' | 'syllabus'
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMapVisible, setIsMapVisible] = useState(false);
   const mapRef = useRef(null);
@@ -802,8 +802,10 @@ export default function App() {
         </div>
       </section>
         </>
+      ) : currentView === 'syllabus' ? (
+        <SyllabusView onBack={() => setCurrentView('courses')} />
       ) : (
-        <CoursesView onBack={() => setCurrentView('home')} />
+        <CoursesView onBack={() => setCurrentView('home')} onViewSyllabus={() => { setCurrentView('syllabus'); window.scrollTo(0,0); }} />
       )}
 
       {/* Footer */}
@@ -845,7 +847,7 @@ export default function App() {
 }
 
 // Courses View Component
-function CoursesView({ onBack }) {
+function CoursesView({ onBack, onViewSyllabus }) {
   return (
     <div className="container animate-fade-in" style={{ paddingTop: '2rem' }}>
       <button onClick={onBack} className="btn btn-outline mb-8" style={{ padding: '0.5rem 1rem', fontSize: '0.9rem', borderColor: 'var(--border-color)', color: '#1a1a2e' }}>
@@ -883,12 +885,137 @@ function CoursesView({ onBack }) {
             <li style={{ display: 'flex', gap: '10px', alignItems: 'center' }}><CheckCircle size={18} color="#a855f7" /> Constancia de participación al finalizar</li>
           </ul>
 
-          <a href="https://wa.me/5216142864898?text=Hola,%20quiero%20informaci%C3%B3n%20sobre%20el%20curso%20completo%20de%20Manicura%20(7%20d%C3%ADas)" target="_blank" rel="noreferrer" className="btn animated-gradient-btn" style={{ width: '100%', padding: '1rem', fontSize: '1rem' }}>
-            Pedir Información por WhatsApp
-          </a>
+          <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+            <a href="https://wa.me/5216142864898?text=Hola,%20quiero%20informaci%C3%B3n%20sobre%20el%20curso%20completo%20de%20Manicura%20(7%20d%C3%ADas)" target="_blank" rel="noreferrer" className="btn animated-gradient-btn" style={{ flex: '1 1 220px', padding: '1rem', fontSize: '1rem' }}>
+              Pedir Información por WhatsApp
+            </a>
+            <button onClick={onViewSyllabus} className="btn btn-outline" style={{ flex: '1 1 200px', padding: '1rem', fontSize: '1rem' }}>
+              Ver Temario Completo <ChevronRight size={18} />
+            </button>
+          </div>
         </div>
       </div>
 
+    </div>
+  );
+}
+
+// Full Syllabus View Component
+function SyllabusView({ onBack }) {
+  const days = [
+    { n: '01', title: 'Fundamentos y preparación de la uña', body: 'Bioseguridad, anatomía de la uña y para qué sirve cada material: la base que sostiene todas las técnicas del curso.', tags: ['Bioseguridad', 'Anatomía', 'Preparación profesional'] },
+    { n: '02', title: 'Manicura rusa', body: 'El acabado en seco que hoy exige el mercado: fresado, retiro de cutícula y esmaltado sin arrastre de piel.', tags: ['Fresado', 'Cutícula en seco', 'Acabado premium'] },
+    { n: '03', title: 'Gel semipermanente', body: 'Aplicación en capas con curado UV/LED y retiro correcto, para un color de alto brillo que dura semanas.', tags: ['Curado UV/LED', 'Aplicación en capas', 'Retiro seguro'] },
+    { n: '04', title: 'Builder gel', body: 'Refuerzo de uñas débiles y alargues cortos con la técnica de encapsulado y construcción de apex.', tags: ['Encapsulado', 'Refuerzo', 'Apex'] },
+    { n: '05', title: 'Polygel', body: 'Extensiones ligeras y resistentes esculpidas con pincel: lo mejor del acrílico y el gel en un solo sistema.', tags: ['Esculpido con pincel', 'Slip solution', 'Extensión completa'] },
+    { n: '06', title: 'Acrílico en escultural', body: 'La técnica de mayor exigencia: polímero y monómero esculpidos a mano sobre molde, para extensiones largas y firmes.', tags: ['Polímero / monómero', 'Esculpido en molde', 'Formas de uña'] },
+    { n: '07', title: 'Diseños, tendencias, efectos y evaluación', body: 'Diseños sencillos y de tendencia, efectos de cromado, ojo de gato y vidrio, y práctica final evaluada para cerrar el curso.', tags: ['Efecto cromado', 'Ojo de gato', 'Evaluación final'], final: true },
+  ];
+
+  const outcomes = [
+    'Preparas una uña con nivel profesional, sin importar la técnica que sigas.',
+    'Ejecutas manicura rusa, gel semipermanente, builder gel, polygel y acrílico escultural.',
+    'Dominas diseños de tendencia y al menos tres efectos especiales.',
+    'Detectas y corriges los errores más comunes de cada técnica antes de que lleguen a tu clienta.',
+    'Explicas con seguridad para qué sirve cada material, como una profesional.',
+    'Te llevas tu constancia de participación del curso completo.',
+  ];
+
+  const whatsappUrl = "https://wa.me/5216142864898?text=Hola,%20quiero%20informaci%C3%B3n%20sobre%20el%20curso%20completo%20de%20Manicura%20(7%20d%C3%ADas)";
+
+  return (
+    <div className="container animate-fade-in" style={{ paddingTop: '2rem', paddingBottom: '3rem' }}>
+      <button onClick={onBack} className="btn btn-outline mb-8" style={{ padding: '0.5rem 1rem', fontSize: '0.9rem', borderColor: 'var(--border-color)', color: '#1a1a2e' }}>
+        <ArrowLeft size={16} /> Volver a Cursos
+      </button>
+
+      {/* Hero */}
+      <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+        <span className="animated-gradient-text" style={{ fontFamily: '"Outfit", sans-serif', fontSize: '0.9rem', fontWeight: 700, letterSpacing: '3px', textTransform: 'uppercase' }}>
+          Curso presencial · 7 días
+        </span>
+        <h1 style={{ fontFamily: '"Playfair Display", serif', fontSize: 'clamp(2.2rem, 5.5vw, 3.5rem)', lineHeight: 1.1, marginTop: '1rem' }}>
+          Domina la manicura <em style={{ fontFamily: '"Playfair Display", serif' }} className="animated-gradient-text">de la base al efecto</em>
+        </h1>
+        <p className="text-muted" style={{ maxWidth: '620px', margin: '1.25rem auto 0', fontSize: '1.05rem' }}>
+          Un curso intensivo donde aprenderás, técnica por técnica, todo lo que hoy piden las clientas: manicura rusa, gel semipermanente, builder gel, polygel, acrílico escultural y los diseños y efectos de tendencia.
+        </p>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.6rem', justifyContent: 'center', marginTop: '1.75rem' }}>
+          {['7 días de formación', '3 horas por sesión', '21 horas totales', '8 técnicas centrales', 'Práctica supervisada cada día'].map(pill => (
+            <span key={pill} style={{ fontSize: '0.8rem', padding: '0.5rem 1rem', borderRadius: '999px', border: '1px solid var(--border-color)', color: 'var(--text-muted)' }}>{pill}</span>
+          ))}
+        </div>
+      </div>
+
+      {/* Para quién */}
+      <div className="grid grid-cols-2 gap-4" style={{ marginBottom: '3rem' }}>
+        <div className="card">
+          <span style={{ fontSize: '0.75rem', fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase', color: 'var(--primary-pink)' }}>Principiantes</span>
+          <h3 style={{ margin: '0.5rem 0 0.75rem' }}>Quiero empezar desde cero</h3>
+          <ul style={{ margin: 0, paddingLeft: '1.2rem', color: 'var(--text-muted)', display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+            <li>Nunca has trabajado profesionalmente en uñas.</li>
+            <li>Quieres una base sólida antes de invertir en tu propio espacio.</li>
+            <li>Buscas aprender las técnicas de mayor demanda en un solo curso.</li>
+          </ul>
+        </div>
+        <div className="card">
+          <span style={{ fontSize: '0.75rem', fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase', color: 'var(--primary-pink)' }}>En activo</span>
+          <h3 style={{ margin: '0.5rem 0 0.75rem' }}>Ya trabajo y quiero certificarme</h3>
+          <ul style={{ margin: 0, paddingLeft: '1.2rem', color: 'var(--text-muted)', display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+            <li>Dominas esmaltado tradicional y quieres sumar extensiones.</li>
+            <li>Buscas actualizarte en polygel, acrílico escultural y efectos de tendencia.</li>
+            <li>Quieres una constancia que respalde tu servicio ante tus clientas.</li>
+          </ul>
+        </div>
+      </div>
+
+      {/* Temario día por día */}
+      <div style={{ marginBottom: '3rem' }}>
+        <h2 style={{ textAlign: 'center', marginBottom: '0.5rem' }}>7 días, una técnica por jornada</h2>
+        <p className="text-muted" style={{ textAlign: 'center', marginBottom: '2rem' }}>3 horas por sesión: teoría breve, demostración en vivo y práctica guiada en modelo.</p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.9rem' }}>
+          {days.map(day => (
+            <div key={day.n} className="card syllabus-day" style={{ background: day.final ? 'linear-gradient(120deg, rgba(168,85,247,0.06), rgba(59,130,246,0.06))' : 'white' }}>
+              <div className="syllabus-day-num">
+                <span>{day.n}</span>
+                <small>3 horas</small>
+              </div>
+              <div>
+                <h4 style={{ marginBottom: '0.5rem' }}>{day.title}</h4>
+                <p className="text-muted" style={{ margin: 0, fontSize: '0.95rem' }}>{day.body}</p>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', marginTop: '0.75rem' }}>
+                  {day.tags.map(tag => (
+                    <span key={tag} style={{ fontSize: '0.75rem', padding: '0.25rem 0.7rem', borderRadius: '999px', background: 'var(--primary-pink-light)', color: 'var(--primary-pink-hover)' }}>{tag}</span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Al terminar */}
+      <div style={{ marginBottom: '3rem' }}>
+        <h2 style={{ textAlign: 'center', marginBottom: '2rem' }}>Sales con manos listas para trabajar</h2>
+        <div className="grid grid-cols-2 gap-4">
+          {outcomes.map(item => (
+            <div key={item} style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
+              <CheckCircle size={20} color="var(--primary-pink)" style={{ flexShrink: 0, marginTop: '2px' }} />
+              <span style={{ fontSize: '0.95rem' }}>{item}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* CTA final */}
+      <div style={{ borderRadius: '1.5rem', padding: 'clamp(2rem, 6vw, 3.5rem)', textAlign: 'center', background: 'linear-gradient(135deg, var(--primary-pink), var(--primary-blue))', color: 'white' }}>
+        <span style={{ fontSize: '0.8rem', fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase', opacity: 0.9 }}>Cupo limitado por generación</span>
+        <h2 style={{ color: 'white', marginTop: '0.75rem' }}>Reserva tu lugar en la próxima generación</h2>
+        <p style={{ color: 'rgba(255,255,255,0.9)', maxWidth: '500px', margin: '0.75rem auto 0' }}>Escríbenos por WhatsApp para conocer fechas disponibles e inversión del curso.</p>
+        <a href={whatsappUrl} target="_blank" rel="noreferrer" className="btn" style={{ background: 'white', color: 'var(--primary-pink-hover)', marginTop: '1.5rem', padding: '0.9rem 2rem', fontSize: '1rem', fontWeight: 700 }}>
+          Pedir Información por WhatsApp
+        </a>
+      </div>
     </div>
   );
 }

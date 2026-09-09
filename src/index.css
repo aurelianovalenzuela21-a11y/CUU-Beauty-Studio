@@ -607,6 +607,49 @@ p { margin-bottom: 1rem; color: var(--text-muted); }
   box-shadow: 0 10px 20px rgba(0,0,0,0.1);
 }
 
+/* Syllabus / Temario */
+.syllabus-day {
+  display: grid;
+  grid-template-columns: 90px 1fr;
+  gap: 1.25rem;
+  align-items: start;
+  padding: 1.5rem;
+}
+
+.syllabus-day-num {
+  display: flex;
+  flex-direction: column;
+}
+
+.syllabus-day-num span {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary-pink);
+  line-height: 1;
+}
+
+.syllabus-day-num small {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.7rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-top: 0.25rem;
+}
+
+@media (max-width: 640px) {
+  .syllabus-day {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+  .syllabus-day-num {
+    flex-direction: row;
+    align-items: baseline;
+    gap: 0.5rem;
+  }
+}
+
 /* Nuevos estilos esteticos */
 .service-card {
   display: flex;
