@@ -426,7 +426,7 @@ export default function App() {
         </nav>
 
         {/* Mobile Menu Button */}
-        <button onClick={() => setIsMenuOpen(true)} className="mobile-menu-btn icon-animated" style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--primary-pink)' }}>
+        <button onClick={() => setIsMenuOpen(true)} aria-label="Abrir menú" className="mobile-menu-btn icon-animated" style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--primary-pink)' }}>
           <Menu size={32} />
         </button>
       </header>
@@ -434,7 +434,7 @@ export default function App() {
       {/* Side Drawer Menu */}
       <div className={`drawer-overlay ${isMenuOpen ? 'open' : ''}`} onClick={() => setIsMenuOpen(false)}></div>
       <div className={`drawer-menu ${isMenuOpen ? 'open' : ''}`}>
-        <button onClick={() => setIsMenuOpen(false)} className="drawer-close icon-animated"><X size={32} /></button>
+        <button onClick={() => setIsMenuOpen(false)} aria-label="Cerrar menú" className="drawer-close icon-animated"><X size={32} /></button>
         <nav className="drawer-nav">
           <a onClick={() => { setCurrentView('home'); setIsMenuOpen(false); window.scrollTo(0,0); }}>Inicio</a>
           <a onClick={() => { setCurrentView('home'); setIsMenuOpen(false); setTimeout(() => document.getElementById('booking-section')?.scrollIntoView({ behavior: 'smooth' }), 100); }}>Servicios y Citas</a>
