@@ -843,49 +843,25 @@ function CoursesView({ onBack }) {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-        {/* Course 1 */}
-        <div className="course-card">
-          <img src="/cuubeauty_hero_1786942656832.jpg" alt="Curso Manicura Rusa" />
-          <div className="course-card-content">
-            <div style={{ display: 'flex', gap: '8px', marginBottom: '1rem' }}>
-              <span className="badge-nuevo">Nivel Básico / Intermedio</span>
-            </div>
-            <h3 style={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: '1.5rem', marginBottom: '0.5rem' }}>Masterclass: Manicura Rusa + Nivelación</h3>
-            <p className="text-muted mb-6">Aprende la limpieza profunda con torno y tijera, además de la técnica de nivelación perfecta para un esmaltado sin imperfecciones.</p>
-            
-            <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 2rem 0', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              <li style={{ display: 'flex', gap: '10px', alignItems: 'center' }}><CheckCircle size={18} color="#a855f7" /> Kit de herramientas incluido</li>
-              <li style={{ display: 'flex', gap: '10px', alignItems: 'center' }}><CheckCircle size={18} color="#a855f7" /> Certificado de asistencia</li>
-              <li style={{ display: 'flex', gap: '10px', alignItems: 'center' }}><CheckCircle size={18} color="#a855f7" /> Práctica en modelo real</li>
-            </ul>
-
-            <a href="https://wa.me/5216142864898?text=Hola,%20quiero%20informaci%C3%B3n%20sobre%20el%20curso%20de%20Manicura%20Rusa" target="_blank" rel="noreferrer" className="btn animated-gradient-btn" style={{ width: '100%', padding: '1rem', fontSize: '1rem' }}>
-              Pedir Información por WhatsApp
-            </a>
+      {/* Flagship Course: 7-day complete program */}
+      <div className="course-card course-card-featured" style={{ marginBottom: '3rem' }}>
+        <img src="/portfolio_ailyn_2.jpg" alt="Curso Completo de Manicura Profesional" />
+        <div className="course-card-content">
+          <div style={{ display: 'flex', gap: '8px', marginBottom: '1rem' }}>
+            <span className="badge-nuevo" style={{ background: 'linear-gradient(135deg, #a855f7, #f472b6, #3b82f6)' }}>Programa Insignia · 7 Días</span>
           </div>
-        </div>
+          <h3 style={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: '1.7rem', marginBottom: '0.5rem' }}>Curso Completo: De la Base al Efecto</h3>
+          <p className="text-muted mb-6">El programa más completo de la academia: siete jornadas de 3 horas para dominar manicura rusa, gel semipermanente, builder gel, polygel y acrílico escultural, además de los diseños y efectos que hoy piden las clientas.</p>
 
-        {/* Course 2 */}
-        <div className="course-card">
-          <img src="/cuubeauty_bg_3_1786948701666.jpg" alt="Curso Acrílico" />
-          <div className="course-card-content">
-            <div style={{ display: 'flex', gap: '8px', marginBottom: '1rem' }}>
-              <span className="badge-nuevo" style={{ background: '#3b82f6' }}>Nivel Avanzado</span>
-            </div>
-            <h3 style={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: '1.5rem', marginBottom: '0.5rem' }}>Especialidad: Acrílico y Estructuras</h3>
-            <p className="text-muted mb-6">Domina las estructuras de salón y vanguardia (Almond, Square, Coffin). Técnicas de encapsulado, reversa y manejo de producto.</p>
-            
-            <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 2rem 0', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              <li style={{ display: 'flex', gap: '10px', alignItems: 'center' }}><Award size={18} color="#3b82f6" /> Certificación Avanzada</li>
-              <li style={{ display: 'flex', gap: '10px', alignItems: 'center' }}><CheckCircle size={18} color="#a855f7" /> Material de alta gama en clase</li>
-              <li style={{ display: 'flex', gap: '10px', alignItems: 'center' }}><CheckCircle size={18} color="#a855f7" /> Asesoría post-curso 30 días</li>
-            </ul>
+          <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 2rem 0', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <li style={{ display: 'flex', gap: '10px', alignItems: 'center' }}><Award size={18} color="#3b82f6" /> 21 horas de formación en 7 sesiones</li>
+            <li style={{ display: 'flex', gap: '10px', alignItems: 'center' }}><CheckCircle size={18} color="#a855f7" /> 8 técnicas centrales, una por jornada</li>
+            <li style={{ display: 'flex', gap: '10px', alignItems: 'center' }}><CheckCircle size={18} color="#a855f7" /> Constancia de participación al finalizar</li>
+          </ul>
 
-            <a href="https://wa.me/5216142864898?text=Hola,%20quiero%20informaci%C3%B3n%20sobre%20el%20curso%20de%20Acr%C3%ADlico" target="_blank" rel="noreferrer" className="btn animated-gradient-btn" style={{ width: '100%', padding: '1rem', fontSize: '1rem' }}>
-              Pedir Información por WhatsApp
-            </a>
-          </div>
+          <a href="https://wa.me/5216142864898?text=Hola,%20quiero%20informaci%C3%B3n%20sobre%20el%20curso%20completo%20de%20Manicura%20(7%20d%C3%ADas)" target="_blank" rel="noreferrer" className="btn animated-gradient-btn" style={{ width: '100%', padding: '1rem', fontSize: '1rem' }}>
+            Pedir Información por WhatsApp
+          </a>
         </div>
       </div>
 
