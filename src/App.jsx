@@ -410,9 +410,9 @@ export default function App() {
       {currentView === 'portfolio' ? <PortfolioView /> : (
         <>
       {/* Header */}
-      <header className="container py-6 flex justify-between items-center relative z-50">
+      <header className="container site-header flex justify-between items-center relative z-50">
         <div className="flex items-center">
-          <img src="/logo-cuu.png" alt="CUU Beauty Studio" style={{ height: '70px', objectFit: 'contain', cursor: 'pointer' }} onClick={() => { setCurrentView('home'); window.scrollTo(0,0); }} />
+          <img src="/logo-cuu.png" alt="CUU Beauty Studio" className="site-logo" onClick={() => { setCurrentView('home'); window.scrollTo(0,0); }} />
         </div>
         
         {/* Desktop Menu */}
@@ -805,6 +805,30 @@ export default function App() {
       ) : (
         <CoursesView onBack={() => setCurrentView('home')} />
       )}
+
+      {/* Footer */}
+      <footer className="site-footer">
+        <div className="container site-footer-inner">
+          <div className="site-footer-brand">
+            <img src="/logo-cuu.png" alt="CUU Beauty Studio" className="site-footer-logo" />
+            <p>Manicure, pedicure spa y tratamientos faciales con especialistas certificadas en Chihuahua.</p>
+          </div>
+          <div className="site-footer-col">
+            <h4>Contacto</h4>
+            <a href="https://wa.me/5216142864898" target="_blank" rel="noreferrer"><MessageCircle size={16} /> WhatsApp</a>
+            <span><MapPin size={16} /> Av Zaragoza 12, Chihuahua, Chih.</span>
+          </div>
+          <div className="site-footer-col">
+            <h4>Explora</h4>
+            <a onClick={() => { setCurrentView('home'); window.scrollTo(0,0); }}>Inicio</a>
+            <a onClick={() => { setCurrentView('home'); setTimeout(() => document.getElementById('booking-section')?.scrollIntoView({ behavior: 'smooth' }), 100); }}>Servicios y Citas</a>
+            <a onClick={() => { setCurrentView('courses'); window.scrollTo(0,0); }}>Cursos de Manicura</a>
+          </div>
+        </div>
+        <div className="site-footer-bottom">
+          © {new Date().getFullYear()} CUU Beauty Studio. Todos los derechos reservados.
+        </div>
+      </footer>
 
       {/* Floating WhatsApp Button */}
       <a href="https://wa.me/5216142864898" target="_blank" rel="noreferrer" className="floating-whatsapp icon-animated" style={{ textDecoration: 'none' }}>
