@@ -100,19 +100,6 @@ p { margin-bottom: 1rem; color: var(--text-muted); }
   padding-bottom: 1.25rem;
 }
 
-.site-logo {
-  height: 56px;
-  object-fit: contain;
-  cursor: pointer;
-  display: block;
-}
-
-@media (max-width: 768px) {
-  .site-logo {
-    height: 44px;
-  }
-}
-
 /* Footer */
 .site-footer {
   margin-top: 4rem;
@@ -125,13 +112,6 @@ p { margin-bottom: 1rem; color: var(--text-muted); }
   grid-template-columns: 1.4fr 1fr 1fr;
   gap: 2.5rem;
   padding: 3.5rem 2rem 2.5rem;
-}
-
-.site-footer-logo {
-  height: 40px;
-  object-fit: contain;
-  filter: brightness(0) invert(1);
-  margin-bottom: 1rem;
 }
 
 .site-footer-brand p {
