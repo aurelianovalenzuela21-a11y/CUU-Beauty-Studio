@@ -45,7 +45,7 @@ export default function Home({ onBookWith, preselect }) {
           <SectionHead
             eyebrow="Reserva en línea"
             title={<>Agenda tu cita <em>en minutos</em></>}
-            text="Elige a tu especialista, el servicio y el horario que te acomode. Verás solo los horarios que siguen libres."
+            text="Elige a tu especialista, el servicio y el horario que te acomode, y envíale tu solicitud por WhatsApp. Ella te confirma en minutos."
           />
           <div className="reveal"><Booking preselect={preselect} /></div>
         </div>
