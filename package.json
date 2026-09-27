@@ -6,12 +6,11 @@
     "start": "node server.js",
     "dev": "vite",
     "build": "vite build",
-    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+    "lint": "oxlint src server.js",
     "preview": "vite preview"
   },
   "dependencies": {
     "axios": "^1.19.0",
-    "date-fns": "^4.4.0",
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
     "lucide-react": "^1.31.0",

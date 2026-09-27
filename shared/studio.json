@@ -1,0 +1,123 @@
+{
+  "timezoneOffset": "-06:00",
+  "whatsapp": "5216142864898",
+  "address": "Av. Ignacio Zaragoza 12, Zona Centro, 31000 Chihuahua, Chih.",
+  "mapsUrl": "https://maps.google.com/?q=Av.+Ignacio+Zaragoza+12,+Zona+Centro,+31000+Chihuahua,+Chih.",
+  "staff": [
+    {
+      "id": "ailyn",
+      "name": "Ailyn",
+      "role": "Manicurista",
+      "category": "manicure",
+      "image": "/profile_ailyn_new.png",
+      "whatsapp": "5216142864898",
+      "portfolio": [
+        "/portfolio_ailyn_1.jpg",
+        "/portfolio_ailyn_2.jpg",
+        "/portfolio_ailyn_3.jpg",
+        "/portfolio_ailyn_4.jpg",
+        "/portfolio_ailyn_5.jpg"
+      ],
+      "services": [
+        { "id": "s1", "name": "Manicura Clásica", "minutes": 45 },
+        { "id": "s2", "name": "Aplicación Gelish", "minutes": 60 },
+        { "id": "s3", "name": "Uñas Acrílicas", "minutes": 90 }
+      ],
+      "schedule": {
+        "0": [],
+        "1": ["10:00", "12:00", "14:00", "17:00"],
+        "2": ["10:00", "12:00", "14:00", "17:00"],
+        "3": ["10:00", "12:00", "14:00", "17:00"],
+        "4": ["10:00", "12:00", "14:00", "17:00"],
+        "5": ["10:00", "12:00", "14:00", "17:00"],
+        "6": ["10:00", "14:00", "17:00"]
+      }
+    },
+    {
+      "id": "jazmine",
+      "name": "Jazmine",
+      "role": "Manicurista",
+      "category": "manicure",
+      "image": "/profile_jazmine_new.jpg",
+      "whatsapp": "5216567545111",
+      "portfolio": [
+        "/portfolio_jazmine_1.jpg",
+        "/portfolio_jazmine_2.jpg",
+        "/portfolio_jazmine_3.jpg"
+      ],
+      "services": [
+        { "id": "s4", "name": "Manicura Rusa", "minutes": 60 },
+        { "id": "s5", "name": "Baño de Acrílico", "minutes": 75 },
+        { "id": "s6", "name": "Uñas Esculturales", "minutes": 120 }
+      ],
+      "schedule": {
+        "0": [],
+        "1": ["14:00", "16:00", "18:00"],
+        "2": ["14:00", "16:00", "18:00"],
+        "3": ["14:00", "16:00", "18:00"],
+        "4": ["14:00", "16:00", "18:00"],
+        "5": ["14:00", "16:00", "18:00"],
+        "6": ["10:00", "12:00", "14:00", "16:00", "18:00"]
+      }
+    },
+    {
+      "id": "bere",
+      "name": "Bere",
+      "role": "Pedicurista",
+      "category": "pedicure",
+      "image": "/profile_bere_new.jpg",
+      "whatsapp": "5216145768073",
+      "portfolio": [
+        "/portfolio_bere_1.jpg",
+        "/portfolio_bere_2.jpg",
+        "/portfolio_bere_3.jpg"
+      ],
+      "services": [
+        { "id": "s7", "name": "Pedicura Spa", "minutes": 60 },
+        { "id": "s8", "name": "Pedicura Clínica", "minutes": 90 },
+        { "id": "s9", "name": "Esmaltado en Pies", "minutes": 30 }
+      ],
+      "schedule": {
+        "0": [],
+        "1": ["15:00", "17:00", "19:00"],
+        "2": ["15:00", "17:00", "19:00"],
+        "3": ["15:00", "17:00", "19:00"],
+        "4": ["15:00", "17:00", "19:00"],
+        "5": ["15:00", "17:00", "19:00"],
+        "6": ["15:00", "17:00"]
+      }
+    },
+    {
+      "id": "arely",
+      "name": "Arely",
+      "role": "Faciales, cejas y maquillaje",
+      "category": "facial",
+      "image": "/profile_arely_new.jpg",
+      "whatsapp": "5216142751792",
+      "portfolio": [
+        "/portfolio_arely_1.jpg",
+        "/portfolio_arely_2.jpg",
+        "/portfolio_arely_3.jpg",
+        "/portfolio_arely_4.jpg"
+      ],
+      "services": [
+        { "id": "s10", "name": "Cejas HD", "minutes": 60 },
+        { "id": "s11", "name": "Lifting de Pestañas", "minutes": 60 },
+        { "id": "s12", "name": "Facial de Reparación", "minutes": 60 },
+        { "id": "s13", "name": "Facial de Limpieza Profunda", "minutes": 90 },
+        { "id": "s14", "name": "Maxi Facial", "minutes": 120 },
+        { "id": "s15", "name": "Keratina", "minutes": 150 },
+        { "id": "s16", "name": "Solo Depilación", "minutes": 30 }
+      ],
+      "schedule": {
+        "0": [],
+        "1": ["10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"],
+        "2": ["10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"],
+        "3": ["10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"],
+        "4": ["10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"],
+        "5": ["10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"],
+        "6": ["10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00"]
+      }
+    }
+  ]
+}
