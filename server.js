@@ -98,8 +98,6 @@ app.get('/get-availability', async (req, res) => {
 app.post('/create-event', async (req, res) => {
     const body = req.body || {};
 
-    // Honeypot: real users never fill this hidden field.
-    if (body.website) return res.json({ success: true });
     if (rateLimited(req.ip)) {
         return res.status(429).json({ error: 'Demasiados intentos. Intenta de nuevo en unos minutos.' });
     }
