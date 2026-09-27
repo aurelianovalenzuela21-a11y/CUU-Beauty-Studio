@@ -1,0 +1,120 @@
+{
+  "business": {
+    "name": "CUU Beauty Studio",
+    "slogan": "Todo lo que necesitas, en un mismo lugar.",
+    "whatsapp": "5216142864898",
+    "address": "Av. Ignacio Zaragoza 12, Zona Centro",
+    "city": "Chihuahua, Chih.",
+    "postalCode": "31000",
+    "lat": 28.632832,
+    "lng": -106.0827253,
+    "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Av.+Ignacio+Zaragoza+12,+Zona+Centro,+31000+Chihuahua,+Chih.",
+    "url": "https://www.cuubeauty.com",
+    "timezoneOffset": "-06:00",
+    "bookingWindowDays": 21,
+    "minLeadMinutes": 60
+  },
+  "categories": [
+    { "id": "unas", "name": "Uñas", "blurb": "Manicura rusa, gelish, acrílico y esculturales." },
+    { "id": "pies", "name": "Pedicura", "blurb": "Pedicura spa, clínica y esmaltado." },
+    { "id": "rostro", "name": "Rostro y cejas", "blurb": "Faciales, cejas HD, lifting y más." }
+  ],
+  "staff": [
+    {
+      "id": "ailyn",
+      "name": "Ailyn",
+      "role": "Manicurista",
+      "category": "unas",
+      "image": "/img/profile_ailyn",
+      "whatsapp": "5216142864898",
+      "email": "ailyn332112@gmail.com",
+      "portfolio": ["/img/portfolio_ailyn_1", "/img/portfolio_ailyn_2", "/img/portfolio_ailyn_3", "/img/portfolio_ailyn_4", "/img/portfolio_ailyn_5"],
+      "services": [
+        { "id": "s1", "name": "Manicura Clásica", "minutes": 45 },
+        { "id": "s2", "name": "Aplicación Gelish", "minutes": 60 },
+        { "id": "s3", "name": "Uñas Acrílicas", "minutes": 90 }
+      ],
+      "schedule": {
+        "1": ["10:00", "12:00", "14:00", "17:00"],
+        "2": ["10:00", "12:00", "14:00", "17:00"],
+        "3": ["10:00", "12:00", "14:00", "17:00"],
+        "4": ["10:00", "12:00", "14:00", "17:00"],
+        "5": ["10:00", "12:00", "14:00", "17:00"],
+        "6": ["10:00", "14:00", "17:00"]
+      }
+    },
+    {
+      "id": "jazmine",
+      "name": "Jazmine",
+      "role": "Manicurista",
+      "category": "unas",
+      "image": "/img/profile_jazmine",
+      "whatsapp": "5216567545111",
+      "email": "Jazminechavez62@gmail.com",
+      "portfolio": [],
+      "services": [
+        { "id": "s4", "name": "Manicura Rusa", "minutes": 60 },
+        { "id": "s5", "name": "Baño de Acrílico", "minutes": 75 },
+        { "id": "s6", "name": "Uñas Esculturales", "minutes": 120 }
+      ],
+      "schedule": {
+        "1": ["14:00", "16:00", "18:00"],
+        "2": ["14:00", "16:00", "18:00"],
+        "3": ["14:00", "16:00", "18:00"],
+        "4": ["14:00", "16:00", "18:00"],
+        "5": ["14:00", "16:00", "18:00"],
+        "6": ["10:00", "12:00", "14:00", "16:00", "18:00"]
+      }
+    },
+    {
+      "id": "bere",
+      "name": "Bere",
+      "role": "Pedicurista",
+      "category": "pies",
+      "image": "/img/profile_bere",
+      "whatsapp": "5216145768073",
+      "email": "",
+      "portfolio": ["/img/portfolio_bere_1", "/img/portfolio_bere_2", "/img/portfolio_bere_3"],
+      "services": [
+        { "id": "s7", "name": "Pedicura Spa", "minutes": 60 },
+        { "id": "s8", "name": "Pedicura Clínica", "minutes": 90 },
+        { "id": "s9", "name": "Esmaltado en Pies", "minutes": 30 }
+      ],
+      "schedule": {
+        "1": ["15:00", "17:00", "19:00"],
+        "2": ["15:00", "17:00", "19:00"],
+        "3": ["15:00", "17:00", "19:00"],
+        "4": ["15:00", "17:00", "19:00"],
+        "5": ["15:00", "17:00", "19:00"],
+        "6": ["15:00", "17:00"]
+      }
+    },
+    {
+      "id": "arely",
+      "name": "Arely",
+      "role": "Facial, cejas y maquillaje",
+      "category": "rostro",
+      "image": "/img/profile_arely",
+      "whatsapp": "5216142751792",
+      "email": "diana30d@gmail.com",
+      "portfolio": ["/img/portfolio_arely_1", "/img/portfolio_arely_2", "/img/portfolio_arely_3", "/img/portfolio_arely_4"],
+      "services": [
+        { "id": "s10", "name": "Cejas HD", "minutes": 60 },
+        { "id": "s11", "name": "Lifting de Pestañas", "minutes": 60 },
+        { "id": "s12", "name": "Facial de Reparación", "minutes": 60 },
+        { "id": "s13", "name": "Facial de Limpieza Profunda", "minutes": 90 },
+        { "id": "s14", "name": "Maxi Facial", "minutes": 120 },
+        { "id": "s15", "name": "Keratina", "minutes": 150 },
+        { "id": "s16", "name": "Solo Depilación", "minutes": 30 }
+      ],
+      "schedule": {
+        "1": ["10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"],
+        "2": ["10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"],
+        "3": ["10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"],
+        "4": ["10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"],
+        "5": ["10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"],
+        "6": ["10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00"]
+      }
+    }
+  ]
+}
