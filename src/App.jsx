@@ -314,86 +314,30 @@ export default function App() {
     }
   }, [selectedDate, selectedStaff]);
 
-  const handleBooking = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-
-    let cleanPhone = formData.phone.replace(/\D/g, '');
-    // Si el usuario puso 10 dígitos (ej. 6141234567), le agregamos el 52 de México
-    if (cleanPhone.length === 10) {
-      cleanPhone = '52' + cleanPhone;
-    }
-    // Make exige internamente que lleve el signo "+"
-    cleanPhone = '+' + cleanPhone;
-
-    // Calculate end time based on service duration
-    const start24 = to24Hour(selectedTime);
-    const durationStr = getSelectedServiceDetails()?.duration || '60 min';
-    const durationMins = parseInt(durationStr.replace(/\D/g, '')) || 60;
-    const [startH, startM] = start24.split(':').map(Number);
-    const totalMins = startH * 60 + startM + durationMins;
-    const endH = Math.floor(totalMins / 60);
-    const endM = totalMins % 60;
-    const end24 = `${endH.toString().padStart(2, '0')}:${endM.toString().padStart(2, '0')}`;
-
+  // Mientras se arreglan las confirmaciones automáticas, cada solicitud de cita
+  // se envía por WhatsApp directo a la especialista del servicio elegido.
+  const buildWhatsAppLink = () => {
     const staffMember = staffList.find(s => s.id === selectedStaff);
-    const staffName = staffMember?.name;
-    const staffEmail = staffMember?.email || '';
-    const staffWhatsapp = staffMember?.whatsapp || '';
-    const dateStr = selectedDate ? format(selectedDate, 'yyyy-MM-dd') : null;
+    const service = getSelectedServiceDetails();
+    const fecha = selectedDate ? format(selectedDate, "EEEE d 'de' MMMM", { locale: es }) : '';
+    const text = [
+      `Hola ${staffMember?.name}, quiero agendar una cita en CUU Beauty:`,
+      `• Servicio: ${service?.name || ''}`,
+      `• Día: ${fecha}`,
+      `• Hora: ${selectedTime || ''}`,
+      `• Nombre: ${formData.name.trim()}`,
+      '¿Me confirmas si está disponible? Gracias.'
+    ].join('\n');
+    return `https://wa.me/${staffMember?.whatsapp}?text=${encodeURIComponent(text)}`;
+  };
 
-    // Preparar el paquete de datos para n8n
-    const bookingData = {
-      staffId: selectedStaff,
-      staffName,
-      staffEmail,
-      staffWhatsapp,
-      serviceId: selectedService,
-      serviceName: getSelectedServiceDetails()?.name,
-      date: dateStr,
-      time: selectedTime,
-      time24Start: start24,
-      time24End: end24,
-      customerName: formData.name,
-      customerPhone: cleanPhone,
-      customerEmail: formData.email,
-      timestamp: new Date().toISOString()
-    };
-
-    try {
-      // 1. Crear el evento en Google Calendar (para que quede bloqueado y no se pueda volver a reservar)
-      await fetch('/create-event', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          date: dateStr,
-          time: start24,
-          staffName,
-          customerName: formData.name,
-          customerPhone: cleanPhone,
-          customerEmail: formData.email,
-          serviceName: getSelectedServiceDetails()?.name
-        })
-      });
-
-      // 2. Enviar al Webhook de n8n para notificaciones (correo y WhatsApp)
-      const WEBHOOK_URL = 'https://n8n.cuustudio.com/webhook/book-appointment';
-      await fetch(WEBHOOK_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(bookingData)
-      });
-      
-      // Simular un poco de tiempo para que se vea natural en la UI si el request es muy rápido
-      await new Promise(resolve => setTimeout(resolve, 800));
-
-    } catch (error) {
-      console.error('Error al confirmar la cita:', error);
-      // Permitimos que avance el flujo para no bloquear la experiencia en caso de fallo de red.
-    } finally {
-      setLoading(false);
-      setBookingStep(5); // Mostrar pantalla de éxito
-    }
+  const handleBooking = (e) => {
+    e.preventDefault();
+    if (!formData.name.trim()) return;
+    const link = buildWhatsAppLink();
+    setBookingStep(5);
+    // Navegación directa (no ventana emergente) para que el celular abra la app de WhatsApp.
+    window.location.href = link;
   };
 
   const getStaffServices = () => {
@@ -738,21 +682,16 @@ export default function App() {
 
                 <div className="input-group">
                   <label className="input-label flex items-center gap-2"><User size={16} /> Nombre Completo</label>
-                  <input type="text" className="input-field" required value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} />
+                  <input type="text" className="input-field" required autoComplete="name" placeholder="Ej. Daniela Pérez" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} />
                 </div>
-                <div className="input-group">
-                  <label className="input-label flex items-center gap-2"><Phone size={16} /> Número de WhatsApp</label>
-                  <input type="tel" className="input-field" required value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} placeholder="+52 123 456 7890" />
-                </div>
-                <div className="input-group">
-                  <label className="input-label flex items-center gap-2"><Mail size={16} /> Correo Electrónico</label>
-                  <input type="email" className="input-field" required value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} />
-                </div>
+                <p className="text-muted" style={{ fontSize: '0.95rem' }}>
+                  Al tocar el botón se abrirá WhatsApp con tu solicitud lista para enviar a {staffList.find(s=>s.id === selectedStaff).name}. Ella te confirma tu cita por ese medio.
+                </p>
 
                 <div className="flex justify-between mt-8">
                   <button type="button" className="btn btn-outline" onClick={() => setBookingStep(3)}>Regresar</button>
-                  <button type="submit" className="btn btn-primary" disabled={loading || !formData.name || !formData.phone}>
-                    {loading ? 'Confirmando...' : 'Confirmar Cita'} <CheckCircle size={18} />
+                  <button type="submit" className="btn btn-primary" disabled={!formData.name.trim()} style={{ background: '#1fa855', borderColor: '#1fa855' }}>
+                    <MessageCircle size={18} /> Enviar por WhatsApp
                   </button>
                 </div>
               </form>
@@ -764,8 +703,12 @@ export default function App() {
                 <div className="inline-flex items-center justify-center p-6 rounded-full mb-6" style={{ background: 'var(--primary-blue-light)', color: 'var(--primary-blue)' }}>
                   <CheckCircle size={48} />
                 </div>
-                <h2>¡Cita Confirmada!</h2>
-                <p>Tu reservación con <strong>{staffList.find(s=>s.id === selectedStaff).name}</strong> ha sido guardada en nuestra agenda. Te hemos enviado los detalles por WhatsApp.</p>
+                <h2>¡Ya casi! Envía tu mensaje</h2>
+                <p>Abrimos WhatsApp con tu solicitud para <strong>{staffList.find(s=>s.id === selectedStaff).name}</strong>. Solo toca <strong>enviar</strong> y ella te confirma tu cita.</p>
+                <a href={buildWhatsAppLink()} className="btn btn-primary mt-4" style={{ background: '#1fa855', borderColor: '#1fa855', display: 'inline-flex', gap: '8px' }}>
+                  <MessageCircle size={18} /> Abrir WhatsApp de nuevo
+                </a>
+                <br />
                 <button className="btn btn-outline mt-6" onClick={() => { setBookingStep(1); setSelectedStaff(null); setSelectedService(null); setSelectedDate(null); setSelectedTime(null); setFormData({name:'', phone:'', email:''}); }}>
                   Agendar otra cita
                 </button>
