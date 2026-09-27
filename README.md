@@ -1,16 +1,24 @@
-# React + Vite
+# CUU Beauty Studio — cuubeauty.com
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Sitio de CUU Beauty Studio (Chihuahua): servicios, equipo, reservas en línea y cursos.
 
-Currently, two official plugins are available:
+- **Frontend:** React + Vite (`src/`). Rutas: `/`, `/cursos`, `/equipo/:id`.
+- **Backend:** Express (`server.js`) sirve `dist/` y expone:
+  - `GET /get-availability?date=YYYY-MM-DD&staffId=ailyn` → horarios ocupados en Google Calendar.
+  - `POST /create-event` → valida, evita dobles reservas, crea el evento y avisa a n8n.
+- **Datos compartidos:** `shared/studio.json` (especialistas, servicios, duraciones y horarios). Edita aquí para cambiar horarios o servicios; lo usan el frontend y el servidor.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Desarrollo
 
-## React Compiler
+```bash
+npm install
+npm run build && npm start   # http://localhost:3000
+npm run lint
+```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Despliegue
 
-## Expanding the Oxlint configuration
+Hostinger despliega automáticamente cada push a `main` (`npm install` → `npm run build` → `node server.js`).
+`dist/` no se versiona: se genera en el servidor.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+Variables de entorno necesarias en Hostinger: ver `.env.example`.
