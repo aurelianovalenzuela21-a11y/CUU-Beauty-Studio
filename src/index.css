@@ -81,7 +81,6 @@ p { color: var(--ink-soft); }
 .skip-link { position: absolute; left: -9999px; top: 8px; z-index: 5000; background: var(--surface); padding: .5rem 1rem; border-radius: 8px; }
 .skip-link:focus { left: 8px; }
 
-.hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
 
 /* ---------- Eyebrow / badges ---------- */
 
@@ -128,7 +127,7 @@ p { color: var(--ink-soft); }
 /* ---------- Header ---------- */
 
 .site-header { position: sticky; top: 0; z-index: 1000; transition: background .3s, box-shadow .3s; }
-.site-header.scrolled { background: rgba(255, 251, 253, .86); backdrop-filter: saturate(160%) blur(14px); -webkit-backdrop-filter: saturate(160%) blur(14px); box-shadow: 0 1px 0 var(--line); }
+.site-header.scrolled { background: rgba(255, 251, 253, .97); backdrop-filter: saturate(160%) blur(14px); -webkit-backdrop-filter: saturate(160%) blur(14px); box-shadow: 0 1px 0 var(--line); }
 .header-inner { height: var(--header-h); display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
 
 .brand-link { text-decoration: none; }

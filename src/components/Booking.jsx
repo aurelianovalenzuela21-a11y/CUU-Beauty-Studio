@@ -7,7 +7,7 @@ import {
 
 const STEPS = ['Especialista', 'Servicio', 'Fecha y hora', 'Tus datos'];
 const DAYS_AHEAD = 21;
-const EMPTY_FORM = { name: '', phone: '', email: '', website: '' };
+const EMPTY_FORM = { name: '', phone: '', email: '' };
 
 export default function Booking({ preselect }) {
   const [step, setStep] = useState(1);
@@ -103,7 +103,6 @@ export default function Booking({ preselect }) {
           customerName: form.name,
           customerPhone: form.phone,
           customerEmail: form.email,
-          website: form.website,
         }),
       });
       const data = await res.json().catch(() => ({}));
@@ -316,8 +315,6 @@ export default function Booking({ preselect }) {
                 <input id="bk-email" type="email" autoComplete="email" required value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} />
               </div>
             </div>
-            {/* Honeypot for bots */}
-            <input className="hp" tabIndex={-1} autoComplete="off" aria-hidden="true" value={form.website} onChange={e => setForm({ ...form, website: e.target.value })} />
 
             <div className="booking-nav">
               <button type="button" className="btn btn-ghost" onClick={() => goTo(3)}><ArrowLeft size={16} /> Fecha</button>
