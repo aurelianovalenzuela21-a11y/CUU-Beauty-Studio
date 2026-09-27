@@ -1,6 +1,5 @@
 const express = require('express');
 const path = require('path');
-const jwt = require('jsonwebtoken');
 const axios = require('axios');
 const studio = require('./shared/studio.json');
 
@@ -8,23 +7,16 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const DIST = path.join(__dirname, 'dist');
 
-const GOOGLE_CLIENT_EMAIL = process.env.GOOGLE_CLIENT_EMAIL;
-// In most hosting dashboards env vars can't contain real newlines, so the key is stored
-// with literal "\n" sequences and converted back here.
-const GOOGLE_PRIVATE_KEY = process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n');
-const N8N_WEBHOOK_URL = process.env.N8N_WEBHOOK_URL || 'https://n8n.cuustudio.com/webhook/book-appointment';
+// Google Calendar access lives in n8n (its "Google Calendar account" connection), so this
+// server holds no Google credentials. N8N_BOOKING_KEY must match the key in the n8n
+// "CUU Beauty reservar (web)" workflow.
+const N8N_BASE = process.env.N8N_BASE_URL || 'https://n8n.cuustudio.com/webhook';
+const N8N_BOOKING_KEY = process.env.N8N_BOOKING_KEY;
 
 // Chihuahua has no DST since 2022, so a fixed offset is exact.
 const TZ_OFFSET = studio.timezoneOffset;
-const TZ_NAME = 'America/Chihuahua';
 
 // Server-only data: never shipped to the browser.
-const CALENDARS = {
-    ailyn: '2a1a8b53eb4e0896c7e717689677d776fc03e9559b2406c81e34689d4e3e9fdf@group.calendar.google.com',
-    arely: '1468b98a1bf3fe6cb42b42724d855262a389cd402811bb15a7d2abbc77fd2ffd@group.calendar.google.com',
-    jazmine: 'aa433317bf9b7f844e6e09a2b45369d3e63f66f91832d06894f6a228dcaecffc@group.calendar.google.com',
-    bere: 'af5ab4ac8f7c0cb8a18dedda14cbaa3261247bde24733aba37d2dda6486345ce@group.calendar.google.com'
-};
 const STAFF_EMAILS = {
     ailyn: 'ailyn332112@gmail.com',
     jazmine: 'Jazminechavez62@gmail.com',
@@ -42,47 +34,16 @@ app.use(express.json({ limit: '10kb' }));
 app.use('/assets', express.static(path.join(DIST, 'assets'), { immutable: true, maxAge: '1y' }));
 app.use(express.static(DIST, { maxAge: '1d', index: false }));
 
-// ---------- Google Calendar ----------
+// ---------- Calendar (through n8n) ----------
 
-let cachedToken = null;
-
-async function getGoogleAccessToken() {
-    if (!GOOGLE_CLIENT_EMAIL || !GOOGLE_PRIVATE_KEY) {
-        throw new Error('Missing GOOGLE_CLIENT_EMAIL / GOOGLE_PRIVATE_KEY environment variables');
-    }
-    const now = Math.floor(Date.now() / 1000);
-    if (cachedToken && cachedToken.expiresAt - 60 > now) return cachedToken.value;
-
-    const assertion = jwt.sign({
-        iss: GOOGLE_CLIENT_EMAIL,
-        scope: 'https://www.googleapis.com/auth/calendar',
-        aud: 'https://oauth2.googleapis.com/token',
-        exp: now + 3600,
-        iat: now
-    }, GOOGLE_PRIVATE_KEY, { algorithm: 'RS256' });
-
-    const { data } = await axios.post('https://oauth2.googleapis.com/token', new URLSearchParams({
-        grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
-        assertion
-    }).toString(), { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } });
-
-    cachedToken = { value: data.access_token, expiresAt: now + (data.expires_in || 3600) };
-    return cachedToken.value;
-}
-
-async function listBusy(calendarId, date) {
-    const token = await getGoogleAccessToken();
-    const params = new URLSearchParams({
-        timeMin: `${date}T00:00:00${TZ_OFFSET}`,
-        timeMax: `${date}T23:59:59${TZ_OFFSET}`,
-        singleEvents: 'true',
-        maxResults: '100'
+async function listBusy(staffId, date) {
+    const { data } = await axios.get(`${N8N_BASE}/cuu-beauty-disponibilidad`, {
+        params: { staff: staffId, date },
+        timeout: 15000
     });
-    const url = `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(calendarId)}/events?${params}`;
-    const { data } = await axios.get(url, { headers: { Authorization: `Bearer ${token}` } });
-    return (data.items || [])
-        .filter(item => item.status !== 'cancelled' && item.start?.dateTime && item.end?.dateTime)
-        .map(item => ({ start: item.start.dateTime, end: item.end.dateTime }));
+    return (data.events || [])
+        .filter(e => e.start?.dateTime && e.end?.dateTime)
+        .map(e => ({ start: e.start.dateTime, end: e.end.dateTime }));
 }
 
 // ---------- Helpers ----------
@@ -122,13 +83,12 @@ function rateLimited(ip, limit = 8, windowMs = 10 * 60 * 1000) {
 
 app.get('/get-availability', async (req, res) => {
     const { date, staffId } = req.query;
-    const calendarId = CALENDARS[staffId];
-    if (!DATE_RE.test(date || '') || !calendarId) {
+    if (!DATE_RE.test(date || '') || !staffById[staffId]) {
         return res.status(400).json({ error: 'Parámetros inválidos' });
     }
     try {
         res.set('Cache-Control', 'no-store');
-        res.json({ busy: await listBusy(calendarId, date) });
+        res.json({ busy: await listBusy(staffId, date) });
     } catch (error) {
         console.error('Availability error:', error.response ? JSON.stringify(error.response.data) : error.message);
         res.status(503).json({ error: 'No pudimos consultar la agenda' });
@@ -166,30 +126,11 @@ app.post('/create-event', async (req, res) => {
     }
 
     const endTime = addMinutes(time, service.minutes);
-    const end = new Date(`${date}T${endTime}:00${TZ_OFFSET}`);
-    const calendarId = CALENDARS[staff.id];
 
     try {
-        const busy = await listBusy(calendarId, date);
-        const overlaps = busy.some(b => start < new Date(b.end) && end > new Date(b.start));
-        if (overlaps) {
-            return res.status(409).json({ error: 'Alguien acaba de reservar ese horario. Elige otro, por favor.' });
-        }
-
-        const token = await getGoogleAccessToken();
-        const { data: event } = await axios.post(
-            `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(calendarId)}/events`,
-            {
-                summary: `${customerName} - ${service.name}`,
-                description: `Cliente: ${customerName}\nTeléfono: +${customerPhone}\nEmail: ${customerEmail}\nServicio: ${service.name} (${service.minutes} min)\nReservado desde cuubeauty.com`,
-                start: { dateTime: `${date}T${time}:00`, timeZone: TZ_NAME },
-                end: { dateTime: `${date}T${endTime}:00`, timeZone: TZ_NAME }
-            },
-            { headers: { Authorization: `Bearer ${token}` } }
-        );
-
-        // Notifications (email / WhatsApp) go through n8n. A failure here must not undo a saved booking.
-        axios.post(N8N_WEBHOOK_URL, {
+        // n8n re-checks the calendar, creates the event and only then sends the
+        // WhatsApp / email notifications.
+        const { status, data } = await axios.post(`${N8N_BASE}/cuu-beauty-reservar`, {
             staffId: staff.id,
             staffName: staff.name,
             staffEmail: STAFF_EMAILS[staff.id] || '',
@@ -204,11 +145,22 @@ app.post('/create-event', async (req, res) => {
             customerPhone: '+' + customerPhone,
             customerEmail,
             timestamp: new Date().toISOString()
-        }, { timeout: 10000 }).catch(err => console.error('n8n webhook error:', err.message));
+        }, {
+            headers: { 'x-cuu-key': N8N_BOOKING_KEY || '' },
+            timeout: 30000,
+            validateStatus: () => true
+        });
 
-        res.json({ success: true, eventId: event.id });
+        if (status === 200 && data?.success) {
+            return res.json({ success: true, eventId: data.eventId });
+        }
+        if (status === 409) {
+            return res.status(409).json({ error: 'Alguien acaba de reservar ese horario. Elige otro, por favor.' });
+        }
+        console.error('Booking error from n8n:', status, JSON.stringify(data));
+        res.status(503).json({ error: 'No pudimos guardar tu cita en este momento.' });
     } catch (error) {
-        console.error('Booking error:', error.response ? JSON.stringify(error.response.data) : error.message);
+        console.error('Booking error:', error.message);
         res.status(503).json({ error: 'No pudimos guardar tu cita en este momento.' });
     }
 });
