@@ -1,13 +1,12 @@
 import { useEffect, useMemo, useState } from 'react';
-import { ArrowLeft, Check, ChevronRight, Clock, Loader2, MessageCircle, RefreshCw } from 'lucide-react';
+import { ArrowLeft, Check, ChevronRight, Clock, Loader2, MessageCircle } from 'lucide-react';
 import {
   staffList, findStaff, waLink, studioToday, addDaysStr, weekdayOf, studioInstant,
   formatDate, formatTime, formatMinutes,
 } from '../lib.js';
 
-const STEPS = ['Especialista', 'Servicio', 'Fecha y hora', 'Tus datos'];
+const STEPS = ['Especialista', 'Servicio', 'Fecha y hora', 'Confirmar'];
 const DAYS_AHEAD = 21;
-const EMPTY_FORM = { name: '', phone: '', email: '' };
 
 export default function Booking({ preselect }) {
   const [step, setStep] = useState(1);
@@ -15,14 +14,11 @@ export default function Booking({ preselect }) {
   const [serviceId, setServiceId] = useState(null);
   const [date, setDate] = useState(null);
   const [time, setTime] = useState(null);
-  const [form, setForm] = useState(EMPTY_FORM);
+  const [name, setName] = useState('');
 
   const [busy, setBusy] = useState([]);
   const [availability, setAvailability] = useState('idle'); // idle | loading | ok | error
-  const [refreshKey, setRefreshKey] = useState(0);
-  const [submitting, setSubmitting] = useState(false);
   const [notice, setNotice] = useState(null);
-  const [result, setResult] = useState(null); // { ok: boolean, message?: string }
 
   const staff = staffId ? findStaff(staffId) : null;
   const service = staff?.services.find(s => s.id === serviceId) || null;
@@ -62,7 +58,7 @@ export default function Booking({ preselect }) {
         setAvailability('error');
       });
     return () => { cancelled = true; };
-  }, [date, staffId, refreshKey]);
+  }, [date, staffId]);
 
   const slots = useMemo(() => {
     if (!staff || !date) return [];
@@ -90,53 +86,13 @@ export default function Booking({ preselect }) {
     document.getElementById('agendar')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
-  async function submit(e) {
-    e.preventDefault();
-    setSubmitting(true);
-    setNotice(null);
-    try {
-      const res = await fetch('/create-event', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          staffId, serviceId, date, time,
-          customerName: form.name,
-          customerPhone: form.phone,
-          customerEmail: form.email,
-        }),
-      });
-      const data = await res.json().catch(() => ({}));
-      if (res.ok && data.success) {
-        setResult({ ok: true });
-      } else if (res.status === 409 || res.status === 400) {
-        setTime(null);
-        setRefreshKey(k => k + 1);
-        setStep(res.status === 409 ? 3 : 4);
-        setNotice(data.error || 'Revisa los datos de tu cita.');
-      } else {
-        setResult({ ok: false, message: data.error });
-      }
-    } catch {
-      setResult({ ok: false });
-    } finally {
-      setSubmitting(false);
-    }
-  }
-
-  function startOver() {
-    resetFrom(1);
-    setForm(EMPTY_FORM);
-    setResult(null);
-    goTo(1);
-  }
-
   const summaryText = staff && service && date && time
-    ? `Hola ${staff.name}, quiero agendar ${service.name} el ${formatDate(date, { weekday: 'long', day: 'numeric', month: 'long' })} a las ${formatTime(time)}. Mi nombre es ${form.name}.`
+    ? `Hola ${staff.name}, quiero agendar una cita desde cuubeauty.com:\n\n💅 Servicio: ${service.name}\n📅 Día: ${formatDate(date, { weekday: 'long', day: 'numeric', month: 'long' })}\n⏰ Hora: ${formatTime(time)}${name.trim() ? `\n🙋‍♀️ Nombre: ${name.trim()}` : ''}\n\n¿Me confirmas si está disponible?`
     : '';
 
   return (
     <div className="booking">
-      {!result && (
+      {(
         <ol className="booking-steps" aria-label="Pasos para agendar">
           {STEPS.map((label, i) => {
             const n = i + 1;
@@ -154,41 +110,7 @@ export default function Booking({ preselect }) {
       <div className="booking-body">
         {notice && <div className="booking-notice" role="alert">{notice}</div>}
 
-        {result?.ok && (
-          <div className="booking-result fade-in">
-            <div className="booking-result-icon"><Check size={34} /></div>
-            <h3>¡Tu cita está agendada!</h3>
-            <p>
-              <strong>{service.name}</strong> con {staff.name}<br />
-              {formatDate(date, { weekday: 'long', day: 'numeric', month: 'long' })} · {formatTime(time)}
-            </p>
-            <p className="small">Te enviaremos la confirmación por WhatsApp y correo. Si necesitas cambiarla, escríbele a {staff.name}.</p>
-            <div className="btn-row center">
-              <a className="btn btn-ghost" href={waLink(`Hola ${staff.name}, acabo de agendar ${service.name} desde la web.`, staff.whatsapp)} target="_blank" rel="noreferrer">
-                <MessageCircle size={18} /> Escribir a {staff.name}
-              </a>
-              <button className="btn btn-primary" onClick={startOver}>Agendar otra cita</button>
-            </div>
-          </div>
-        )}
-
-        {result && !result.ok && (
-          <div className="booking-result fade-in">
-            <div className="booking-result-icon warn">!</div>
-            <h3>No pudimos confirmar tu cita en línea</h3>
-            <p>{result.message || 'Hubo un problema de conexión.'} Tu horario no se ha guardado todavía: envíanos tus datos por WhatsApp y te la confirmamos enseguida.</p>
-            <div className="btn-row center">
-              <a className="btn btn-primary" href={waLink(summaryText, staff.whatsapp)} target="_blank" rel="noreferrer">
-                <MessageCircle size={18} /> Agendar por WhatsApp
-              </a>
-              <button className="btn btn-ghost" onClick={() => { setResult(null); setStep(4); }}>
-                <RefreshCw size={16} /> Intentar de nuevo
-              </button>
-            </div>
-          </div>
-        )}
-
-        {!result && step === 1 && (
+        {step === 1 && (
           <div className="fade-in">
             <h3 className="booking-title">¿Con quién te gustaría agendar?</h3>
             <div className="pick-staff">
@@ -207,7 +129,7 @@ export default function Booking({ preselect }) {
           </div>
         )}
 
-        {!result && step === 2 && staff && (
+        {step === 2 && staff && (
           <div className="fade-in">
             <StaffHeader staff={staff} subtitle="Elige tu servicio" />
             <div className="pick-list">
@@ -231,7 +153,7 @@ export default function Booking({ preselect }) {
           </div>
         )}
 
-        {!result && step === 3 && staff && service && (
+        {step === 3 && staff && service && (
           <div className="fade-in">
             <StaffHeader staff={staff} subtitle={`${service.name} · ${formatMinutes(service.minutes)}`} />
 
@@ -261,7 +183,7 @@ export default function Booking({ preselect }) {
             {date && availability !== 'loading' && (
               <>
                 {availability === 'error' && (
-                  <p className="muted small">No pudimos revisar la agenda en este momento; confirmaremos la disponibilidad al enviar tu cita.</p>
+                  <p className="muted small">No pudimos revisar la agenda en este momento; te confirmarán la disponibilidad por WhatsApp.</p>
                 )}
                 {slots.length === 0 || slots.every(s => s.disabled) ? (
                   <p className="muted small">No quedan horarios para este día. Prueba con otra fecha.</p>
@@ -291,8 +213,8 @@ export default function Booking({ preselect }) {
           </div>
         )}
 
-        {!result && step === 4 && staff && service && date && time && (
-          <form className="fade-in" onSubmit={submit}>
+        {step === 4 && staff && service && date && time && (
+          <div className="fade-in">
             <div className="booking-summary">
               <img src={staff.image} alt="" width="56" height="56" />
               <div>
@@ -302,27 +224,19 @@ export default function Booking({ preselect }) {
             </div>
 
             <div className="field">
-              <label htmlFor="bk-name">Nombre completo</label>
-              <input id="bk-name" autoComplete="name" required minLength={2} value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} />
+              <label htmlFor="bk-name">Tu nombre</label>
+              <input id="bk-name" autoComplete="name" value={name} onChange={e => setName(e.target.value)} placeholder={`Para que ${staff.name} sepa quién eres`} />
             </div>
-            <div className="field-row">
-              <div className="field">
-                <label htmlFor="bk-phone">WhatsApp</label>
-                <input id="bk-phone" type="tel" inputMode="tel" autoComplete="tel" required pattern="[\d\s\(\)\+\-]{10,}" title="Escribe tu número a 10 dígitos" placeholder="614 123 4567" value={form.phone} onChange={e => setForm({ ...form, phone: e.target.value })} />
-              </div>
-              <div className="field">
-                <label htmlFor="bk-email">Correo electrónico</label>
-                <input id="bk-email" type="email" autoComplete="email" required value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} />
-              </div>
-            </div>
+
+            <p className="muted small">Al tocar el botón se abre WhatsApp con tu mensaje listo para {staff.name}. Solo envíalo y ella te confirma tu cita.</p>
 
             <div className="booking-nav">
               <button type="button" className="btn btn-ghost" onClick={() => goTo(3)}><ArrowLeft size={16} /> Fecha</button>
-              <button type="submit" className="btn btn-primary" disabled={submitting}>
-                {submitting ? <><Loader2 size={18} className="spin" /> Confirmando…</> : <>Confirmar cita <Check size={18} /></>}
-              </button>
+              <a className="btn btn-whatsapp" href={waLink(summaryText, staff.whatsapp)} target="_blank" rel="noreferrer">
+                <MessageCircle size={18} /> Agendar por WhatsApp
+              </a>
             </div>
-          </form>
+          </div>
         )}
       </div>
     </div>

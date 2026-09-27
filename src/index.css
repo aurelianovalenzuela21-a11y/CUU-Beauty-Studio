@@ -120,6 +120,8 @@ p { color: var(--ink-soft); }
 .btn-soft:hover { background: #fbcfe8; }
 .btn-white { color: #a21caf; background: #fff; box-shadow: 0 10px 24px -10px rgba(45, 31, 58, .35); }
 .btn-white:hover { transform: translateY(-2px); }
+.btn-whatsapp { color: #fff; background: #25d366; box-shadow: 0 8px 20px -8px rgba(37, 211, 102, .6); }
+.btn-whatsapp:hover { transform: translateY(-2px); background: #1fb858; }
 
 .btn-row { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 1.75rem; }
 .btn-row.center { justify-content: center; }
